@@ -1,0 +1,103 @@
+{% extends 'game_base.html' %}
+
+{% block title %}
+    个人博客网站
+{% endblock %}
+
+{% block link_extends %}
+    <link rel="stylesheet" href="/css/game_list.css">
+{% endblock %}
+
+<!--列表点击的时候是否选中-->
+{% block nav_home_active %}
+    active
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-md-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">{% block type %}游戏列表{% endblock %}</div>  <!-- 这是html内置的方法，可以获取长度。-->
+                    <div class="panel-body">
+                        {% for game in games %}
+                            <div class="game">
+                                <h4><a href="{% url 'game_detail' game.pk %}">{{ game.name }}</a></h4>
+                                <p><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>{{ game.game_type.type_name }},
+                                    <span class="glyphicon glyphicon-time" aria-hidden="true"></span>{{ game.create_time|date:"Y:m:d" }},
+                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>阅读数：{{ game.read_num }}
+                                </p>
+                                <p>{{ game.introduction|safe|truncatechars:120 }}</p>        <!-- 同样的，可以截取前30个字，注意英文的用words中文的用chars -->
+                            </div>
+                        {% empty %}                                                  <!--这个是用来表示如果循环里面啥也没有的话，输出下面的东西-->
+                            <h4>--暂无游戏展示，敬请期待--</h4>
+                        {% endfor %}
+                    </div>
+                </div>
+            <div class="paginator">
+                  <ul class="pagination">
+                    <li>
+                        {% if games.has_previous %}
+                            <a href="?page={{ games.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% else %}
+                                <span aria-hidden="true">&laquo;</span>
+                        {% endif %}
+
+                    </li>
+                      {% for page_num in page_range %}
+
+                          {% if page_num == games.number %}
+                              <li class="active"><span>{{ page_num }}</span></li>     <!--这里换成span是为了让当前页不可点-->
+                          {% elif  page_num == "..."%}
+                              <li><span>{{ page_num }}</span></li>
+                          {% else %}
+                            <li><a href="?page={{ page_num }}">{{ page_num }}</a></li>
+                          {% endif %}
+
+                      {% endfor %}
+                    <li>
+                         {% if games.has_next %}
+                            <a href="?page={{ games.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% else %}
+                                <span aria-hidden="true">&raquo;</span>
+                        {% endif %}
+                    </li>
+                  </ul>
+            <p> 共{{ games.paginator.object_list|length }}个游戏,当前页面游戏数为{{ games|length }}</p>
+            </div>
+            </div>
+
+
+            <div class="col-sm-4 col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">博客分类</div>
+                    <div class="panel-body">
+                        <ul>
+                            {% for gametype in types %}
+                                <li><a href="{% url 'get_game_name' gametype.type_name %}">{{ gametype.type_name }}({{ gametype.game_count }})</a>
+                                </li>
+                            {% empty %}
+                                <li>暂无分类</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">日期分类</div>
+                        <div class="panel-body">
+                            <ul>
+                               {% for time in game_date %}
+                                   <li><a href="{% url 'game_with_date' time.year time.month %}">{{ time|date:"Y年n月" }}</a></li>
+                               {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,32 @@
+.game.name{
+    text-align: center
+}
+.game_content{
+    text-align: center;
+    text-indent: 2em;     /*首行缩进*/
+}
+.game_describe{
+    list-style-type: none;
+    margin-bottom: 2em;
+    text-align: center;
+}
+.game_describe li{
+    display: inline-block;
+    margin-right: 2em;
+}
+.more_game p{
+    display: inline-block;
+    margin-left: 2em;
+}
+
+.more_game{
+    margin-top: 2em;
+    text-align: center;
+}
+div.comment_area{
+    margin-top: 2em;
+}
+h3.comment_area_title{
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.4em;
+}

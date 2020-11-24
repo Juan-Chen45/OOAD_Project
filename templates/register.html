@@ -1,0 +1,14 @@
+{% extends 'game_base.html' %}
+
+{% block title %}
+    注册界面
+{% endblock %}
+
+
+{% block content %}
+   <form action="" method="POST">
+       {% csrf_token %}
+       {{ reg_form }}
+       <input type="submit" value="注册">
+   </form>
+{% endblock %}

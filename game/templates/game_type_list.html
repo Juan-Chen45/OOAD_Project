@@ -1,0 +1,9 @@
+{% extends 'game_list.html' %}
+
+{% block title %}
+    游戏分类：{{ name }}
+{% endblock %}
+
+{% block type %}
+{{ name }}-----<a href="{% url 'game_list' %}">查看全部博客</a>
+{% endblock %}
