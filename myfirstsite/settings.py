@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "read_statistic",
     "comment",
     "game",
+    "developer",
 ]
 
 MIDDLEWARE = [

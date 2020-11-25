@@ -28,7 +28,7 @@ urlpatterns = [
     path("reguser/", reguser, name="reguser"),
     path("logout/",user_logout,name = "logout"),
     path("game/", include("game.urls")),
-
+    path("developer/",include("developer.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
