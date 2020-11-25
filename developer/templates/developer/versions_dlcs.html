@@ -1,0 +1,65 @@
+{% extends 'developer/base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'developer/developer_games.css' %}">
+{% endblock %}
+
+{% block nav_games_active %}active{% endblock %}
+
+{% block content %}
+    <div class="col-lg-8">
+        <table id="versions_dlcs">
+            <caption>
+                <h2>{{ game.name }}</h2>
+            </caption>
+            <tr>
+                <th>cover</th>
+                <th>name</th>
+                <th>price</th>
+                <th>announce date</th>
+                <th>announce date</th>
+                <th>create date</th>
+                <th>operation</th>
+            </tr>
+            {% for version in versions %}
+                <tr>
+                    <td>
+                        <img src="{{ version.cover.url }}" height="50" width="80"
+                             onerror="this.source = '{% static '/pic/upload.png' %}'">
+                    </td>
+                    <td>{{ version.name }}</td>
+                    <td>{{ version.price }}</td>
+                    <td>{{ version.announce_date }}</td>
+                    <td>{{ version.release_date }}</td>
+                    <td>{{ version.create_date }}</td>
+                    <td>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">修改</button>
+                        </a>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">折扣</button>
+                        </a>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">删除</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <a href="">
+            <button type="button" class="btn btn-primary">添加版本</button>
+        </a>
+        <a href="">
+            <button type="button" class="btn btn-primary">添加DLC</button>
+        </a>
+        <a href="{% url 'developer_games' developer.pk %}">
+            <button type="button" class="btn btn-primary">返回</button>
+        </a>
+    </div>
+{% endblock %}

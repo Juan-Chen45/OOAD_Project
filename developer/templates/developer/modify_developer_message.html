@@ -1,0 +1,51 @@
+{% extends 'developer/base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}''{% endblock %}
+
+{% block content %}
+<div class="col-lg-8">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel-heading" style="text-align: center;">
+                <h3>Developer message</h3>
+                </div>
+                <div class="panel-body">
+                <h3>Developer name: {{developer.name}}</h3>
+                <h3>Developer account:{{developer.account}}</h3>
+                <h3>Developer introduction:</h3>
+                <h4>{{developer.introduction}}</h4>
+                <h3>create date:{{developer.create_date}}</h3>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="panel-heading" style="text-align: center;">
+                    <h3>Modify message</h3>
+                </div>
+                <div class="panel-body">
+                <label for="name">name</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名字">
+                <form role="form">
+                    <div class="form-group">
+                      <label for="introduction">Developer introduction:</label>
+                      <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                  </form>
+                <button type="submit" class="btn btn-primary">
+                    submit your change
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
