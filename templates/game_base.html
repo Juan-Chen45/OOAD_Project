@@ -1,97 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% load static %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
 
-    <!--引入 element-ui 的样式，-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 必须先引入vue，  后使用element-ui -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <!-- 引入element 的组件库-->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <link rel="stylesheet" href="/static/diyIcon/iconfont.css">
+  <!--引入 element-ui 的样式，-->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <!-- 必须先引入vue，  后使用element-ui -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+  <!-- 引入element 的组件库-->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
-    <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
-    因此放在前面
-    -->
-    {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
+  {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
 
-    <title>{% block title %}{% endblock %}</title>
+  <script src="/static/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/static/css/fanshunicon/iconfont.css">
+  {#这里引用的是js，因为通常比较大，所以放到最后来加载，记得要先加载第一个再加载第二个  #}
+
+  <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
+  因此放在前面
+  -->
+
+  <title>{% block title %}{% endblock %}</title>
 </head>
 
 
 <body>
-
-
 <div id="app" style="height: 100%">
 
-    <el-container style="height: 100%; border: 1px solid #eee" >
-        <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
-            <el-menu default-active="1-4-1" class="el-menu-vertical-demo" style="height: 100%"
-                  background-color="#000000"
-                  text-color="#B7B7B7">
-                <a href="{% url 'home' %}" style="text-decoration:none">
-                    <el-menu-item index="1">
-                        <i class="el-icon-s-home" style="align-content: center"></i>
-                        <span slot="title"></span>
-                    </el-menu-item>
-                </a>
+  <el-container style="height: 100%; border: 1px solid #eee" direction="vertical">
+    <el-aside width="280px" style="background-color: rgb(238, 241, 246)">
+      <el-menu class="el-menu-vertical-demo" style="height: 100%"
+               active-text-color="#409EFF"
+               background-color="#000000"
+               text-color="#B7B7B7">
+        <li style="text-align: center">
+          <a href="{% url 'home' %}" style="text-decoration:none">
+            <el-menu-item index="1">
+              <i class="el-icon-s-home" style="align-content: center"></i>
+              <span slot="title"></span>
+            </el-menu-item>
+          </a></li>
+        <li style="text-decoration:none" class="{% block nav_home_active %}{% endblock %}">
+          <a href="{% url 'game_list' %}" style="text-decoration:none">
+            <el-menu-item index="2">
+              <i class="el-icon-fanshun-game" style="align-content: center"></i>
+              <span slot="title">游戏列表</span>
+            </el-menu-item>
+          </a></li>
 
-                <li style="text-decoration:none" class="{% block nav_home_active %}{% endblock %}">
-                    <a href="{% url 'game_list' %}" style="text-decoration:none">
-                        <el-menu-item index="1">
-                            <i class="el-icon-diy-game" style="align-content: center"></i>
-                            <span slot="title">游戏列表</span>
-                        </el-menu-item>
-                    </a></li>
+        <a style="text-decoration:none">
+          <el-menu-item index="3">
+            <i class="el-icon-search"></i>
+            <span slot="title">Search</span>
+          </el-menu-item>
+        </a>
 
+        {% if user.is_authenticated %}
+          <el-submenu index="4">
+            <template slot="title">
+              <i class="el-icon-user-solid"></i>
+              <span slot="title">Account</span>
+            </template>
+            <el-menu-item index="4-1">View My Profile</el-menu-item>
+            <a href="{% url "logout" %}" style="text-decoration:none">
+              <el-menu-item index="4-2">Log out</el-menu-item>
+            </a>
+          </el-submenu>
+        {% else %}
+          <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
+            <el-menu-item index="4-1">Log in</el-menu-item>
+          </a>
+          <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
+            <el-menu-item index="4-2">Register</el-menu-item>
+          </a>
+        {% endif %}
 
-                <a style="text-decoration:none">
-                    <el-menu-item index="3">
-                        <i class="el-icon-search"></i>
-                        <span slot="title">Search</span>
-                    </el-menu-item>
-                </a>
+      </el-menu>
+    </el-aside>
 
-                {% if user.is_authenticated %}
-                    <el-submenu index="4">
-                        <template slot="title">
-                            <i class="el-icon-user-solid"></i>
-                            <span slot="title">Account</span>
-                        </template>
-                        <el-menu-item index="4-1">View My Profile</el-menu-item>
-                        <a href="{% url "logout" %}" style="text-decoration:none">
-                            <el-menu-item index="4-2">Log out</el-menu-item>
-                        </a>
-                    </el-submenu>
-                {% else %}
-                    <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
-                        <el-menu-item index="4-1">Log in</el-menu-item>
-                    </a>
-                    <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
-                        <el-menu-item index="4-2">Register</el-menu-item>
-                    </a>
-                {% endif %}
+    {% block content %}{% endblock %}
 
-            </el-menu>
-        </el-aside>
-
-        <el-container>
-            {% block content %}{% endblock %}
-        </el-container>
-
-    </el-container>
+  </el-container>
 </div>
 
-{% block JS %}
-
-{% endblock %}
 <script>
     const Main = {
         methods: {
@@ -105,12 +103,10 @@
 
 </script>
 
+{% block JS %}
+
+{% endblock %}
 </body>
-
-<script src="/static/js/jquery.min.js"></script>
-<script type="text/javascript" src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-{#这里引用的是js，因为通常比较大，所以放到最后来加载，记得要先加载第一个再加载第二个  #}
-
 </html>
 
 <!--创建了一个html模板，这样别的html可以引用它-->

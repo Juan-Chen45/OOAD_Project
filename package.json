@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "element-ui": "^2.14.1"
+  },
+  "dependencies": {
+    "axios": "^0.21.0"
   }
 }
