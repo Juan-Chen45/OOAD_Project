@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <!-- 引入element 的组件库-->
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-{#    <script>new Vue().$mount('#app')</script>#}
+    <link rel="stylesheet" href="/static/diyIcon/iconfont.css">
 
     <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
     因此放在前面
@@ -28,31 +28,82 @@
 
 <body>
 
-<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a href="{% url 'home' %}" class="navbar-brand">网站首页</a>
-        </div>
 
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li class="{% block nav_home_active %}{% endblock %}"><a href="{% url 'game_list' %}">游戏列表</a></li>
-                <li class=""><a href="{% url "user_login" %}?from={{ request.get_full_path }}">登录</a></li>
-                <li class=""><a href="{% url "reguser" %}?from={{ request.get_full_path }}">注册</a></li>
-                <li class=""><a href="{% url "logout" %}">注销</a></li>
-            </ul>
-        </div>
+<div id="app" style="height: 100%">
 
-    </div>
+    <el-container style="height: 100%; border: 1px solid #eee" >
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246); text-align: center">
+            <el-menu default-active="1-4-1" class="el-menu-vertical-demo" style="height: 100%"
+                  background-color="#000000"
+                  text-color="#B7B7B7">
+                <a href="{% url 'home' %}" style="text-decoration:none">
+                    <el-menu-item index="1">
+                        <i class="el-icon-s-home" style="align-content: center"></i>
+                        <span slot="title"></span>
+                    </el-menu-item>
+                </a>
+
+                <li style="text-decoration:none" class="{% block nav_home_active %}{% endblock %}">
+                    <a href="{% url 'game_list' %}" style="text-decoration:none">
+                        <el-menu-item index="1">
+                            <i class="el-icon-diy-game" style="align-content: center"></i>
+                            <span slot="title">游戏列表</span>
+                        </el-menu-item>
+                    </a></li>
+
+
+                <a style="text-decoration:none">
+                    <el-menu-item index="3">
+                        <i class="el-icon-search"></i>
+                        <span slot="title">Search</span>
+                    </el-menu-item>
+                </a>
+
+                {% if user.is_authenticated %}
+                    <el-submenu index="4">
+                        <template slot="title">
+                            <i class="el-icon-user-solid"></i>
+                            <span slot="title">Account</span>
+                        </template>
+                        <el-menu-item index="4-1">View My Profile</el-menu-item>
+                        <a href="{% url "logout" %}" style="text-decoration:none">
+                            <el-menu-item index="4-2">Log out</el-menu-item>
+                        </a>
+                    </el-submenu>
+                {% else %}
+                    <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
+                        <el-menu-item index="4-1">Log in</el-menu-item>
+                    </a>
+                    <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
+                        <el-menu-item index="4-2">Register</el-menu-item>
+                    </a>
+                {% endif %}
+
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            {% block content %}{% endblock %}
+        </el-container>
+
+    </el-container>
 </div>
 
-{% block content %}{% endblock %}
+{% block JS %}
+
+{% endblock %}
+<script>
+    const Main = {
+        methods: {
+            handleCurrentChange(val) {
+                window.location.href = "?page= " + val;
+            }
+        },
+    };
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
+
+</script>
 
 </body>
 

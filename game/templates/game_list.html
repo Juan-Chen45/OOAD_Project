@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block link_extends %}
-    <link rel="stylesheet" href="/css/game_list.css">
+    <link rel="stylesheet" href="/static/css/game_list.css">
 {% endblock %}
 
 <!--列表点击的时候是否选中-->
@@ -50,18 +50,7 @@
                             layout="prev, pager, next"
                             :total="{{ games.paginator.object_list|length }}">
                     </el-pagination>
-                    <script>
-                        const Main = {
-                            methods: {
-                                handleCurrentChange(val) {
-                                    window.location.href = "?page= " + val;
-                                }
-                            },
-                        };
-                        var Ctor = Vue.extend(Main)
-                        new Ctor().$mount('#app')
 
-                    </script>
                 </div>
 
             </div>

@@ -1,11 +1,11 @@
 {% extends 'game_base.html' %}
 
 {% block title %}
-    这是我的首页
+    Home Page
 {% endblock %}
 
 {% block link_extends %}
-<script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
 {% endblock %}
 
 {% block nav_home_active %}
@@ -15,6 +15,24 @@
 {% block content %}
     <!-- 图表容器 DOM -->
     <div id="container" style="width: 600px;height:400px;"></div>
+    <div class="col-sm-4 col-md-3">
+        <ul>
+            {% for hotdata in today_hot_data %}
+                {#                这里的hotdata是ReadDetail类型#}
+                <li>{{ hotdata.object_id }} ({{ hotdata.read_num }})</li>
+                <li><a href="{% url 'game_detail' hotdata.content_object.pk %}">{{ hotdata.content_object.title }}</a>
+                    ({{ hotdata.read_num }})
+                </li>
+            {% empty %}
+                <li>今天暂时没有热门排序</li>
+            {% endfor %}
+
+        </ul>
+    </div>
+{% endblock %}
+
+{% block JS %}
+
     <script>
         // 图表配置
         var options = {
@@ -26,13 +44,13 @@
             },
             xAxis: {
                 categories: {{ days|safe }},   // x 轴分类
-                title:{text:"前七日访问量变化"}
+                title: {text: "前七日访问量变化"}
             },
             yAxis: {
                 title: {
                     text: '访问量'                // y 轴标题
                 },
-                gridLineDashStyle:"dash",
+                gridLineDashStyle: "dash",
             },
             series: [{                              // 数据列
                 name: '访问量',                        // 数据列名
@@ -53,16 +71,4 @@
         var chart = Highcharts.chart('container', options);
 
     </script>
-    {# 下面是今日热门数据  #}
-    <ul>
-    {% for hotdata in today_hot_data %}
-            {# 这里的hotdata是ReadDetail类型  #}
-{#        <li>{{ hotdata.object_id }} ({{ hotdata.read_num }})</li>#}
-        <li><a href="{% url 'game_detail' hotdata.content_object.pk %}">{{ hotdata.content_object.title }}</a>
-            ({{ hotdata.read_num }})</li>
-    {% empty %}
-        <li>今天暂时没有热门排序</li>
-    {% endfor %}
-
-    </ul>
 {% endblock %}

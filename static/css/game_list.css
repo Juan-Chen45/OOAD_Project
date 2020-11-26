@@ -8,7 +8,7 @@
 /*最后一个不要下划线*/
 .game:not(:last-child){
     margin-bottom: 2em;
-    border-bottom: dashed 1px;
+    border-bottom: dashed 1px ;
 }
 
 .paginator{

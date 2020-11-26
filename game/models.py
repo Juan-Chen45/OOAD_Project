@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from read_statistic.models import ReadNum_Expand
-
+from ckeditor_uploader.fields import RichTextUploadingField
 # Create your models here.
 
 class GameType(models.Model):
@@ -19,7 +19,7 @@ class Game(models.Model,ReadNum_Expand):
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
     lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
     price = models.FloatField()
-    avatar = models.ImageField()
+    avatar = RichTextUploadingField()
 
     def __str__(self):
         return self.name
