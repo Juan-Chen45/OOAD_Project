@@ -6,7 +6,7 @@
 
 {% block link_extends %}
     {% load static %}
-    <link rel="stylesheet" href="/css/game_detail.css">
+    <link rel="stylesheet" href="/static/css/game_detail.css">
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 {% endblock %}
@@ -29,21 +29,22 @@
                         <li>阅读数：{{ game.read_num }}</li>
                         </ul>
                         <div class="game_content">{{ game.introduction|safe }}</div>
+                        <div class="game_image">{{ game.avatar|safe }}</div>
                         <div class="more_game">
                             <p>
+                                {% if previous_game %}
+                                    上一个:<a href="{% url 'game_detail' previous_game.pk %}">{{ previous_game.name }}</a>
+                                {% else %}
+                                    <span>已经是第一个了</span>
+                                {% endif %}
+                            </p>
+                            <p>
                                 {% if next_game %}
-                                    上一个:<a href="{% url 'game_detail' next_game.pk %}">{{ next_game.name }}</a>
+                                    下一个:<a href="{% url 'game_detail' next_game.pk %}">{{ next_game.name }}</a>
                                 {% else %}
                                     <span>已经是最后一个了</span>
                                 {% endif %}
 
-                            </p>
-                            <p>
-                                {% if previous_game %}
-                                    下一个:<a href="{% url 'game_detail' previous_game.pk %}">{{ previous_game.title }}</a>
-                                {% else %}
-                                    <span>已经是第一个了</span>
-                                {% endif %}
                             </p>
                         </div>
                     </div>

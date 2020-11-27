@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block link_extends %}
-    <link rel="stylesheet" href="/css/game_list.css">
+    <link rel="stylesheet" href="/static/css/game_list.css">
 {% endblock %}
 
 <!--列表点击的时候是否选中-->
@@ -14,31 +14,41 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8 col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">{% block type %}游戏列表{% endblock %}</div>  <!-- 这是html内置的方法，可以获取长度。-->
-                    <div class="panel-body">
-                        {% for game in games %}
-                            <div class="game">
-                                <h4><a href="{% url 'game_detail' game.pk %}">{{ game.name }}</a></h4>
-                                <p><span class="glyphicon glyphicon-tag"
-                                         aria-hidden="true"></span>{{ game.game_type.type_name }},
-                                    <span class="glyphicon glyphicon-time"
-                                          aria-hidden="true"></span>{{ game.create_time|date:"Y:m:d" }},
-                                    <span class="glyphicon glyphicon-eye-open"
-                                          aria-hidden="true"></span>阅读数：{{ game.read_num }}
-                                </p>
-                                <p>{{ game.introduction|safe|truncatechars:120 }}</p>
-                                <!-- 同样的，可以截取前30个字，注意英文的用words中文的用chars -->
-                            </div>
-                        {% empty %}                                                  <!--这个是用来表示如果循环里面啥也没有的话，输出下面的东西-->
-                            <h4>--暂无游戏展示，敬请期待--</h4>
-                        {% endfor %}
-                    </div>
-                </div>
 
+    <el-header>
+        Browse
+        <el-divider></el-divider>
+    </el-header>
+    <el-main>
+
+        <el-main>
+            <div class="col-sm-8 col-md-9">
+                <el-row :gutter="20">
+                    {% for game in games %}
+                        <el-tooltip placement="top" style="position: relative">
+                            <div slot="content">{{ game.introduction|safe|truncatechars:120 }}</div>
+                            <el-button>
+                                <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
+{#                                <el-col :xs="4" :sm="6" :md="7" :xl="6">#}
+                                    <el-card :body-style="{ padding: '0px' }">
+                                        <img src="{{ game.get_content_img_url }}">
+                                        <div style="padding: 14px">
+                                            <h4>{{ game.name }}</h4>
+                                            <el-button
+                                                    icon="el-icon-fanshun-biaoqian">{{ game.game_type.type_name }}</el-button>
+                                            <el-button
+                                                    icon="el-icon-fanshun-rili">{{ game.create_time|date:"Y:m:d" }}</el-button>
+                                            <el-button icon="el-icon-fanshun-caiyouduo_liulanliang">
+                                                阅读数：{{ game.read_num }}</el-button>
+
+                                        </div>
+                                    </el-card>
+{#                                </el-col>#}
+                            </a>
+                            </el-button>
+                        </el-tooltip>
+                    {% endfor %}
+                </el-row>
                 <div id="app" style="text-align:center">
                     <el-tag effect="dark">
                         共{{ games.paginator.object_list|length }}个游戏,当前页面游戏数为{{ games|length }}</el-tag>
@@ -50,28 +60,17 @@
                             layout="prev, pager, next"
                             :total="{{ games.paginator.object_list|length }}">
                     </el-pagination>
-                    <script>
-                        const Main = {
-                            methods: {
-                                handleCurrentChange(val) {
-                                    window.location.href = "?page= " + val;
-                                }
-                            },
-                        };
-                        var Ctor = Vue.extend(Main)
-                        new Ctor().$mount('#app')
 
-                    </script>
                 </div>
-
             </div>
 
 
             <div class="col-sm-4 col-md-3">
                 <div class="panel panel-default">
-                    <div class="panel-heading">博客分类</div>
+                    <div class="panel-heading">游戏分类</div>
                     <div class="panel-body">
                         <ul>
+                            <a href="{% url 'game_list' %}">所有游戏</a>
                             {% for gametype in types %}
                                 <li>
                                     <a href="{% url 'get_game_name' gametype.type_name %}">{{ gametype.type_name }}({{ gametype.game_count }})</a>
@@ -94,7 +93,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </el-main>
+    </el-main>
 
 {% endblock %}

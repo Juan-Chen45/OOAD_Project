@@ -1,0 +1,31 @@
+
+.hot {
+    background-color: #B3C0D1;
+    color: #333;
+}
+
+.el-carousel__item h3 {
+    color: #475669;
+    font-size: 18px;
+    opacity: 0.75;
+    line-height: 300px;
+    margin: 0;
+}
+.img-group {
+  position: relative;
+  display: inline-block;
+}
+
+.img-tip {
+  position: absolute;
+  bottom: 0;
+  background: #333;
+  color: #fff;
+  opacity: 0.6;
+}
+
+.img-group:hover .img-tip {
+  display: block;
+  width: 100%;
+  text-align: center;
+}

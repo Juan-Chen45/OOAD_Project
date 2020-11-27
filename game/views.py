@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404,render
+from django.shortcuts import get_object_or_404, render
 from .models import GameType, Game
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -9,13 +9,12 @@ from comment.models import Comment
 from comment.forms import CommentForm
 
 
-
 # Create your views here.
 
 def game_list(request):
     all_games = Game.objects.all()
     context = get_game_common(request, all_games)
-    return render(request,"game_list.html", context)
+    return render(request, "game_list.html", context)
 
 
 def game_detail(request, game_id):
@@ -24,9 +23,9 @@ def game_detail(request, game_id):
     # 获得这个game对应的comment
 
     game_content_type = ContentType.objects.get_for_model(currgame)
-    comments = Comment.objects.filter(content_type=game_content_type,object_id=game_id)
+    comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
 
-    cookie_key = cookie_read(request,currgame)
+    cookie_key = cookie_read(request, currgame)
 
     context = {}
     context["game"] = currgame
@@ -40,8 +39,8 @@ def game_detail(request, game_id):
     data["object_id"] = game_id
     context["comment_form"] = CommentForm(initial=data)
 
-    response = render(request,"game_detail.html", context)
-    response.set_cookie(cookie_key,'true')
+    response = render(request, "game_detail.html", context)
+    response.set_cookie(cookie_key, 'true')
 
     return response
 
@@ -51,14 +50,14 @@ def get_game_name(request, game_type_name):
     all_games = Game.objects.filter(game_type=type)
     context = get_game_common(request, all_games)
     context["name"] = game_type_name
-    return render(request,("game_type_list.html"), context)
+    return render(request, ("game_type_list.html"), context)
 
 
 def game_with_date(request, year, month):
     all_games = Game.objects.filter(create_time__year=year, create_time__month=month)
-    context = get_game_common(request,all_games)
+    context = get_game_common(request, all_games)
     context["curr_time"] = "%s 年 %s 月" % (year, month)
-    return render(request,("game_with_date.html"), context)
+    return render(request, ("game_with_date.html"), context)
 
 
 def get_game_common(request, all_games):
@@ -80,10 +79,9 @@ def get_game_common(request, all_games):
     if page_range[-1] != paginator.num_pages:
         page_range.append(paginator.num_pages)
 
-
     context = {}
     context["games"] = current_page
-    context["types"] = GameType.objects.annotate(game_count = Count("game"))
+    context["types"] = GameType.objects.annotate(game_count=Count("game"))
     context["page_range"] = page_range
     context["game_date"] = Game.objects.dates("create_time", "month", order="DESC")
     return context
