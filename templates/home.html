@@ -1,12 +1,12 @@
 {% extends 'game_base.html' %}
 
 {% block title %}
-  Home Page
+    Home Page
 {% endblock %}
 
 {% block link_extends %}
-  <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
-  <link rel="stylesheet" href="/static/css/home.css">
+    <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <link rel="stylesheet" href="/static/css/home.css">
 {% endblock %}
 
 {% block nav_home_active %}
@@ -14,79 +14,92 @@
 {% endblock %}
 
 {% block content %}
-  <el-main>
     <el-main>
-      <!-- 图表容器 DOM -->
-      <el-carousel :interval="5000" arrow="always" style="text-align: center">
-        {% for hot_data in today_hot_data %}
-          <el-carousel-item >
-            <h3>{{ hotdata.content_object.title }}</h3>
-            <img style="background-color: gray;height: 100%"
-                 alt=""
-                 src="/media/upload/2020/11/27/switzerland-graubunden-lago-bianco-ice-sun-a-new-day_z5L8rIl.jpg">
-            <h3>{{ hotdata.object_id }}</h3>
-          </el-carousel-item>
-        {% endfor %}
+        <el-main>
+            <!-- 图表容器 DOM -->
+            <el-carousel :interval="5000" arrow="always" style="text-align: center; align-content: center">
+                {% for hotdata in today_hot_data %}
+                    <el-carousel-item>
+                        <a style="text-decoration: none" href="{% url 'game_detail' hotdata.content_object.pk %}">
+                            <div style="height: 100%;position: relative;display: inline-block;">
+                            <div class="img-tip" style="font-size: x-large;position: absolute;bottom: 0;background: #333;color: white;opacity: 0.6;display: ;">
+                                <div>
+                                    <el-button style="width: 100%;border-width: 0px;border-radius: 0px; ">
+                                    {{ hotdata.content_object.name|safe }}
+                                                </el-button>
+                                </div>
+                                <div>
+                                    <el-button icon="el-icon-fanshun-caiyouduo_liulanliang" style="width: 100%;border-width: 0px;border-radius: 0px;">
+                                                阅读数：{{ hotdata.read_num }}</el-button>
+                                </div>
+                            </div>
+                            <img class="back-img" style="background-color: gray;height: 100%"
+                                 alt=""
+                                 src="{{ hotdata.content_object.get_content_img_url }}">
+                        </div>
+                        </a>
+                    </el-carousel-item>
+                {% endfor %}
 
-      </el-carousel>
-      {#      <div class="hot">#}
-      {#        <ul>#}
-      {##}
-      {#          {% for hotdata in today_hot_data %}#}
-      {#                这里的hotdata是ReadDetail类型#}
-      {#            <li>{{ hotdata.object_id }} ({{ hotdata.read_num }})</li>#}
-      {#            <li><a href="{% url 'game_detail' hotdata.content_object.pk %}">{{ hotdata.content_object.title }}</a>#}
-      {#              ({{ hotdata.read_num }})#}
-      {#            </li>#}
-      {#          {% empty %}#}
-      {#            <li>今天暂时没有热门排序</li>#}
-      {#          {% endfor %}#}
-      {##}
-      {#        </ul>#}
-      {#      </div>#}
-      <div id="container" style="width: 600px;height:400px;"></div>
+            </el-carousel>
+            {#      <div class="hot">#}
+            {#        <ul>#}
+            {##}
+            {#          {% for hotdata in today_hot_data %}#}
+            {#                这里的hotdata是ReadDetail类型#}
+            {#            <li>{{ hotdata.object_id }} ({{ hotdata.read_num }})</li>#}
+            {#            <li><a href="{% url 'game_detail' hotdata.content_object.pk %}">{{ hotdata.content_object.title }}</a>#}
+            {#              ({{ hotdata.read_num }})#}
+            {#            </li>#}
+            {#          {% empty %}#}
+            {#            <li>今天暂时没有热门排序</li>#}
+            {#          {% endfor %}#}
+            {##}
+            {#        </ul>#}
+            {#      </div>#}
+            <div id="container" style="width: 600px;height:400px;"></div>
+        </el-main>
     </el-main>
-  </el-main>
 {% endblock %}
 
 {% block JS %}
 
-  <script>
-      // 图表配置
-      var options = {
-          chart: {
-              type: 'line'                          //指定图表的类型，默认是折线图（line）
-          },
-          title: {
-              text: null                 // 标题
-          },
-          xAxis: {
-              categories: {{ days|safe }},   // x 轴分类
-              title: {text: "前七日访问量变化"}
-          },
-          yAxis: {
-              title: {
-                  text: '访问量'                // y 轴标题
-              },
-              gridLineDashStyle: "dash",
-          },
-          series: [{                              // 数据列
-              name: '访问量',                        // 数据列名
-              data: {{ date }}                     // 数据
-          },]
-          ,
-          plotOptions: {
-              line: {
-                  dataLabels: {
-                      enabled: true
-                  }
-              }
-          },
-          legend: {enabled: false},             // 不要数据tag和版权信息
-          credits: {enabled: false}
-      };
-      // 图表初始化函数
-      var chart = Highcharts.chart('container', options);
+    <script>
+        // 图表配置
+        var options = {
+            chart: {
+                type: 'line'                          //指定图表的类型，默认是折线图（line）
+            },
+            title: {
+                text: null                 // 标题
+            },
+            xAxis: {
+                categories: {{ days|safe }},   // x 轴分类
+                title: {text: "前七日访问量变化"}
+            },
+            yAxis: {
+                title: {
+                    text: '访问量'                // y 轴标题
+                },
+                gridLineDashStyle: "dash",
+            },
+            series: [{                              // 数据列
+                name: '访问量',                        // 数据列名
+                data: {{ date }}                     // 数据
+            },]
+            ,
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {enabled: false},             // 不要数据tag和版权信息
+            credits: {enabled: false}
+        };
+        // 图表初始化函数
+        var chart = Highcharts.chart('container', options);
 
-  </script>
+    </script>
 {% endblock %}

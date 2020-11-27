@@ -11,3 +11,21 @@
     line-height: 300px;
     margin: 0;
 }
+.img-group {
+  position: relative;
+  display: inline-block;
+}
+
+.img-tip {
+  position: absolute;
+  bottom: 0;
+  background: #333;
+  color: #fff;
+  opacity: 0.6;
+}
+
+.img-group:hover .img-tip {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
