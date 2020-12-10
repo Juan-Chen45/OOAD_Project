@@ -1,107 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% load static %}
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="/static/css/base.css">
-  <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
 
-  <!--引入 element-ui 的样式，-->
-  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-  <!-- 必须先引入vue，  后使用element-ui -->
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-  <!-- 引入element 的组件库-->
-  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!--引入 element-ui 的样式，-->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 必须先引入vue，  后使用element-ui -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <!-- 引入element 的组件库-->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
-  {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
+    {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
 
-  <script src="/static/js/jquery.min.js"></script>
-  <script type="text/javascript" src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="/static/css/fanshunicon/iconfont.css">
-  {#这里引用的是js，因为通常比较大，所以放到最后来加载，记得要先加载第一个再加载第二个  #}
+    <script src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/fanshunicon/iconfont.css">
+    {#这里引用的是js，因为通常比较大，所以放到最后来加载，记得要先加载第一个再加载第二个  #}
 
-  <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
-  因此放在前面
-  -->
+    <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
+    因此放在前面
+    -->
 
-  <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
 </head>
 
 
 <body>
 <div id="app" style="height: 100%">
 
-  <el-container style="height: 100%; border: 1px solid #eee" direction="vertical">
-    <el-aside width="280px" style="background-color: rgb(238, 241, 246)">
-      <el-menu class="el-menu-vertical-demo" style="height: 100%"
-               active-text-color="#409EFF"
-               background-color="#000000"
-               text-color="#B7B7B7">
-        <li style="text-align: center">
-          <a href="{% url 'home' %}" style="text-decoration:none">
-            <el-menu-item index="1">
-              <i class="el-icon-s-home" style="align-content: center"></i>
-              <span slot="title"></span>
-            </el-menu-item>
-          </a></li>
-        <li style="text-decoration:none" class="{% block nav_home_active %}{% endblock %}">
-          <a href="{% url 'game_list' %}" style="text-decoration:none">
-            <el-menu-item index="2">
-              <i class="el-icon-fanshun-game" style="align-content: center"></i>
-              <span slot="title">游戏列表</span>
-            </el-menu-item>
-          </a></li>
+    <el-container style="height: 100%; border: 1px solid #eee" direction="vertical">
+        <el-aside width="280px" style="background-color: rgb(238, 241, 246)">
+            <el-menu class="el-menu-vertical-demo" style="height: 100%"
+                     active-text-color="#409EFF"
+                     background-color="#000000"
+                     text-color="#B7B7B7">
+                <li style="text-align: center">
+                    <a href="{% url 'home' %}" style="text-decoration:none">
+                        <el-menu-item index="1">
+                            <i class="el-icon-s-home" style="align-content: center"></i>
+                            <span slot="title"></span>
+                        </el-menu-item>
+                    </a></li>
+                <li style="text-decoration:none" class="{% block nav_home_active %}{% endblock %}">
+                    <a href="{% url 'game_list' %}" style="text-decoration:none">
+                        <el-menu-item index="2">
+                            <i class="el-icon-fanshun-game" style="align-content: center"></i>
+                            <span slot="title">游戏列表</span>
+                        </el-menu-item>
+                    </a></li>
 
-        <a style="text-decoration:none">
-          <el-menu-item index="3">
-            <i class="el-icon-search"></i>
-            <span slot="title">Search</span>
-          </el-menu-item>
-        </a>
+                <a style="text-decoration:none">
+                    <el-menu-item index="3">
+                        <i class="el-icon-search"></i>
+                        <span slot="title">Search</span>
+                    </el-menu-item>
+                </a>
 
-        {% if user.is_authenticated %}
-          <el-submenu index="4">
-            <template slot="title">
-              <i class="el-icon-user-solid"></i>
-              <span slot="title">Account</span>
-            </template>
-            <el-menu-item index="4-1">View My Profile</el-menu-item>
-            <a href="{% url "logout" %}" style="text-decoration:none">
-              <el-menu-item index="4-2">Log out</el-menu-item>
-            </a>
-          </el-submenu>
-        {% else %}
-          <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
-            <el-menu-item index="4-1">Log in</el-menu-item>
-          </a>
-          <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
-            <el-menu-item index="4-2">Register</el-menu-item>
-          </a>
-        {% endif %}
+                {% if user.is_authenticated %}
+                    <el-submenu index="4">
+                        <template slot="title">
+                            <i class="el-icon-user-solid"></i>
+                            <span slot="title">Account</span>
+                        </template>
+                        <el-menu-item index="4-1">View My Profile</el-menu-item>
+                        <a href="{% url "logout" %}" style="text-decoration:none">
+                            <el-menu-item index="4-2">Log out</el-menu-item>
+                        </a>
+                    </el-submenu>
+                {% else %}
 
-      </el-menu>
-    </el-aside>
+                    <a style="text-decoration:none" @click="dialogLogInVisible = true">
+                        <el-menu-item index="4-1">Sign in</el-menu-item>
+                    </a>
 
-    {% block content %}{% endblock %}
+                    <el-dialog title="SIGN IN" :visible.sync="dialogLogInVisible" width="35%"
+                               ref="loginForm"
+                               :close-on-click-modal="false"
+                               :center="true">
+                        <div style='font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+                         text-align: center;
+                         margin-bottom: 20px;
+                         font-size: 20px;'>
+                            Sign in with your game account
+                        </div>
+                        <el-form :model="form" :rules="rules">
+                            <el-form-item prop="username">
+                                <el-input v-model="form.username" autocomplete="off"
+                                          prefix-icon="el-icon-user-solid"
+                                          placeholder="User Name"
+                                          maxlength="10"
+                                          size="small"></el-input>
+                            </el-form-item>
 
-  </el-container>
+                            <el-form-item prop="password">
+                                <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
+                                          placeholder="Enter Your Passwords"
+                                          show-password
+                                          size="small"></el-input>
+                            </el-form-item>
+
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button type="primary" @click="signIn('loginForm')">SIGN IN</el-button>
+                            <el-button @click="dialogLogInVisible = false">CANCEL</el-button>
+                        </div>
+                    </el-dialog>
+
+                    <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
+                        <el-menu-item index="4-1">Log in</el-menu-item>
+                    </a>
+                    <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
+                        <el-menu-item index="4-2">Register</el-menu-item>
+                    </a>
+                {% endif %}
+
+            </el-menu>
+        </el-aside>
+        {% block content %}{% endblock %}
+
+    </el-container>
 </div>
 
 <script>
     const Main = {
+        data() {
+            return {
+                {% block Data %}{% endblock %}
+                dialogLogInVisible: false,
+                form: {
+                    username: '',
+                    password: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                formLabelWidth: '120px',
+                rules: {
+                    username: [
+                        {required: true, message: '账号不可为空', trigger: 'blur'}
+                    ],
+                    password: [
+                        {required: true, message: '密码不可为空', trigger: 'blur'}
+                    ]
+                },
+            };
+        },
         methods: {
+            {% block Method %}{% endblock %}
+
             handleCurrentChange(val) {
                 window.location.href = "?page= " + val;
+            },
+            signIn(formName) {
+                // 为表单绑定验证功能
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        // 使用 vue-router 路由到指定页面，该方式称之为编程式导航
+                        window.location.href = "";
+                    } else {
+                        this.dialogVisible = true;
+                        this.dialogLogInVisible = false;
+                        return false;
+                    }
+                });
             }
         },
     };
-    var Ctor = Vue.extend(Main)
+    const Ctor = Vue.extend(Main);
     new Ctor().$mount('#app')
 
 </script>
+
 
 {% block JS %}
 

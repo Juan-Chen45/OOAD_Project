@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/static/css/game_list.css">
 {% endblock %}
 
-<!--列表点击的时候是否选中-->
 {% block nav_home_active %}
     active
 {% endblock %}
@@ -29,7 +28,6 @@
                             <div slot="content">{{ game.introduction|safe|truncatechars:120 }}</div>
                             <el-button>
                                 <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
-{#                                <el-col :xs="4" :sm="6" :md="7" :xl="6">#}
                                     <el-card :body-style="{ padding: '0px' }">
                                         <img src="{{ game.get_content_img_url }}">
                                         <div style="padding: 14px">
