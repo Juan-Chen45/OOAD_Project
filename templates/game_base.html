@@ -75,45 +75,8 @@
                     </el-submenu>
                 {% else %}
 
-                    <a style="text-decoration:none" @click="dialogLogInVisible = true">
-                        <el-menu-item index="4-1">Sign in</el-menu-item>
-                    </a>
-
-                    <el-dialog title="SIGN IN" :visible.sync="dialogLogInVisible" width="35%"
-                               ref="loginForm"
-                               :close-on-click-modal="false"
-                               :center="true">
-                        <div style='font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
-                         text-align: center;
-                         margin-bottom: 20px;
-                         font-size: 20px;'>
-                            Sign in with your game account
-                        </div>
-                        <el-form :model="form" :rules="rules">
-                            <el-form-item prop="username">
-                                <el-input v-model="form.username" autocomplete="off"
-                                          prefix-icon="el-icon-user-solid"
-                                          placeholder="User Name"
-                                          maxlength="10"
-                                          size="small"></el-input>
-                            </el-form-item>
-
-                            <el-form-item prop="password">
-                                <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
-                                          placeholder="Enter Your Passwords"
-                                          show-password
-                                          size="small"></el-input>
-                            </el-form-item>
-
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="primary" @click="signIn('loginForm')">SIGN IN</el-button>
-                            <el-button @click="dialogLogInVisible = false">CANCEL</el-button>
-                        </div>
-                    </el-dialog>
-
                     <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
-                        <el-menu-item index="4-1">Log in</el-menu-item>
+                        <el-menu-item index="4-1">Sign in</el-menu-item>
                     </a>
                     <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
                         <el-menu-item index="4-2">Register</el-menu-item>
@@ -132,45 +95,14 @@
         data() {
             return {
                 {% block Data %}{% endblock %}
-                dialogLogInVisible: false,
-                form: {
-                    username: '',
-                    password: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
-                formLabelWidth: '120px',
-                rules: {
-                    username: [
-                        {required: true, message: '账号不可为空', trigger: 'blur'}
-                    ],
-                    password: [
-                        {required: true, message: '密码不可为空', trigger: 'blur'}
-                    ]
-                },
+
             };
         },
         methods: {
             {% block Method %}{% endblock %}
-
             handleCurrentChange(val) {
                 window.location.href = "?page= " + val;
             },
-            signIn(formName) {
-                // 为表单绑定验证功能
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        // 使用 vue-router 路由到指定页面，该方式称之为编程式导航
-                        window.location.href = "";
-                    } else {
-                        this.dialogVisible = true;
-                        this.dialogLogInVisible = false;
-                        return false;
-                    }
-                });
-            }
         },
     };
     const Ctor = Vue.extend(Main);
