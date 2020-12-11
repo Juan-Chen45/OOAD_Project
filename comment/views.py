@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from .models import Comment
 from django.contrib.contenttypes.models import ContentType
 from .forms import CommentForm
+
+
 # Create your views here.
 
 def update_comment(request):
-
     # referer = request.META.get("HTTP_REFERER", reverse("home"))
     # user = request.user
     # # 再多检查一次
@@ -33,13 +34,13 @@ def update_comment(request):
     # comment.save()
     # return redirect(referer)
 
-# =============================================现在把判断逻辑放到forms里面去了
+    # =============================================现在把判断逻辑放到forms里面去了
     referer = request.META.get("HTTP_REFERER", reverse("home"))
     comment_form = CommentForm(request.POST)
     user = request.user
     # 再多检查一次
     if not user.is_authenticated:
-        return render(request, 'error.html', {"message": "用户未登录","redirect_to":referer})
+        return render(request, 'error.html', {"message": "用户未登录", "redirect_to": referer})
     if comment_form.is_valid():
         # 检查通过
         comment = Comment()
@@ -49,4 +50,4 @@ def update_comment(request):
         comment.save()
         return redirect(referer)
     else:
-        return render(request, 'error.html', {"message": comment_form.errors,"redirect_to":referer})
+        return render(request, 'error.html', {"message": comment_form.errors, "redirect_to": referer})

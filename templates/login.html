@@ -12,15 +12,67 @@
 
             {# 这里要记得把url原样的提交回去才能找到之前你访问的页面   #}
             {% if not user.is_authenticated %}
+                <el-col :span="9" >
+                    <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
+                        {% csrf_token %}
+                        {% if login_form.non_field_errors %}
+                            <ol>
+                                {% for error in login_form.non_field_errors %}
+                                    <el-alert
+                                            title={{ error|escape }}
+                                                    type="error">
+                                    </el-alert>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                        <el-form-item prop="username">
+                            <el-input v-model="form.username" autocomplete="off"
+                                      name="username"
+                                      prefix-icon="el-icon-user-solid"
+                                      placeholder="User Name"
+                                      maxlength="10"
+                                      clearable></el-input>
+                        </el-form-item>
 
-                <form action="" method="POST">
-                    {% csrf_token %}
-                    {{ login_form }}
-                    <input type="submit" value="登录">
-                </form>
-            {% else %}
-                <h3>您已登录</h3>
+                        <el-form-item prop="password">
+                            <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
+                                      placeholder="Enter Your Passwords"
+                                      name="password"
+                                      show-password></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button native-type="submit">SIGN IN</el-button>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
             {% endif %}
         </el-main>
     </el-main>
+{% endblock %}
+
+{% block Data %}
+    dialogLogInVisible: false,
+    form: {
+    username: '',
+    password: '',
+    delivery: false,
+    },
+    rules: {
+    username: [
+    {required: true, message: '账号不可为空', trigger: 'blur'}
+    ],
+    password: [
+    {required: true, message: '密码不可为空', trigger: 'blur'}
+    ]
+    },
+{% endblock %}
+
+{% block Method %}
+    open3() {
+    this.$message({
+    showClose: true,
+    message: '警告哦，这是一条警告消息',
+    type: 'warning'
+    });
+    },
 {% endblock %}

@@ -17,20 +17,7 @@ def homepage(request):
 
     # 本地代码这里就不加缓存了，懒得了，后续可以加上
 
-    if request.method == "POST":
-        login_form = LoginForm(request.POST)
-        # 验证过了，说明用户验证也成功了
-        if login_form.is_valid():
-            user = login_form.cleaned_data["user"]
-            login(request, user)
-            return redirect(request.GET.get("from", reverse("home")))
-    else:
-        login_form = LoginForm()
-    context = {}
-    context["login_form"] = login_form
-    context['date'] = data
-    context['days'] = days
-    context['today_hot_data'] = today_hot_data
+    context = {'date': data, 'days': days, 'today_hot_data': today_hot_data}
     return render(request, "home.html", context)
 
 
@@ -44,8 +31,7 @@ def user_login(request):
             return redirect(request.GET.get("from", reverse("home")))
     else:
         login_form = LoginForm()
-    context = {}
-    context["login_form"] = login_form
+    context = {"login_form": login_form}
     return render(request, "login.html", context)
 
 
@@ -63,8 +49,7 @@ def reguser(request):
             return redirect(request.GET.get("from", reverse("home")))
     else:
         reg_form = RegisterForm()
-    context = {}
-    context["reg_form"] = reg_form
+    context = {"reg_form": reg_form}
     return render(request, "register.html", context)
 
 
