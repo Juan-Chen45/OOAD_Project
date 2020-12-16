@@ -6,30 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
-
-    <!--引入 element-ui 的样式，-->
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <!-- 必须先引入vue，  后使用element-ui -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <!-- 引入element 的组件库-->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 
     {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
-
+    <!-- import CSS -->
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/main.js"></script>
     <script src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/static/css/fanshunicon/iconfont.css">
-    {#这里引用的是js，因为通常比较大，所以放到最后来加载，记得要先加载第一个再加载第二个  #}
 
-    <!--这上面两个引入的是css，放在html前面是因为浏览器加载是从头到尾加载的，为了防止html加载出来了样式却还没有加载出来
-    因此放在前面
-    -->
+    <link rel="stylesheet" href="/static/css/base.css">
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+
+
 
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -65,7 +56,7 @@
                         <span slot="title">Search</span>
                     </el-menu-item>
                 </a>
-
+                <li style="flex: 1"></li>
                 {% if user.is_authenticated %}
                     <el-submenu index="4">
                         <template slot="title">
@@ -79,17 +70,24 @@
                     </el-submenu>
                 {% else %}
 
-                    <a style="text-decoration:none" href="{% url "user_login" %}?from={{ request.get_full_path }}">
-                        <el-menu-item index="4-1">Sign in</el-menu-item>
+                    <a style="text-decoration:none; text-align: center"
+                       href="{% url "user_login" %}?from={{ request.get_full_path }}">
+                        <el-menu-item class="cli" style="background-color: orangered" index="4-1">Sign in</el-menu-item>
                     </a>
-                    <a style="text-decoration:none" href="{% url "reguser" %}?from={{ request.get_full_path }}">
-                        <el-menu-item index="4-2">Register</el-menu-item>
+
+
+                    <a style="text-decoration:none; text-align: center"
+                       href="{% url "reguser" %}?from={{ request.get_full_path }}">
+                        <el-menu-item class="cli" index="4-2">Register</el-menu-item>
                     </a>
                 {% endif %}
 
             </el-menu>
         </el-aside>
+
+    <el-main class="MainBlock">
         {% block content %}{% endblock %}
+    </el-main>
 
     </el-container>
 </div>
@@ -99,6 +97,7 @@
         data() {
             return {
                 {% block Data %}{% endblock %}
+
 
             };
         },
@@ -113,8 +112,6 @@
     new Ctor().$mount('#app')
 
 </script>
-
-
 {% block JS %}
 
 {% endblock %}

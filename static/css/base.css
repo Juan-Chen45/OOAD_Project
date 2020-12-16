@@ -1,11 +1,15 @@
 
-#container {
-    margin: 20em auto; /*图表的居中*/
-    height: 20em;
-    min-width: 20em;
-    max-width: 30em;
-    max-height: 20em;
+.el-menu-item.cli {
+    background-color: orangered !important;
+    color: white !important;
+    border-radius: 15px;
+    margin: 5%;
 }
+
+.el-menu-item.cli:hover {
+    background-color: orangered !important;
+}
+
 
 .el-header {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -16,25 +20,24 @@
 
 html, body, #app, .el-container {
     /*设置内部填充为0，几个布局元素之间没有间距*/
-    padding: 0px;
+    padding: 0;
     /*外部间距也是如此设置*/
-    margin: 0px;
+    margin: 0;
     height: 100%;
 }
 
 .el-aside {
     display: block;
-    position: absolute;
+    position: fixed;
     left: 0;
-    top: 0px;
+    top: 0;
     bottom: 0;
 }
 
-.el-main {
+.el-main.MainBlock {
     position: absolute;
-    left: 200px;
+    left: 280px;
     right: 0;
-    top: 60px;
-    bottom: 0;
+    top: 0;
     overflow-y: scroll;
 }

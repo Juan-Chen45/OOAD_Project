@@ -13,85 +13,80 @@
 {% endblock %}
 
 {% block content %}
-
     <el-header>
         Browse
         <el-divider></el-divider>
     </el-header>
+
     <el-main>
+        <div class="col-sm-8 col-md-9">
+            <el-row :gutter="20">
+                {% for game in games %}
+                    <el-tooltip placement="top" style="position: relative">
+                        <div slot="content">{{ game.introduction|safe|truncatechars:120 }}</div>
+                            <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
+                                <el-card :body-style="{ padding: '0px' }">
+                                    <img src="{{ game.get_content_img_url }}" alt="">
+                                    <div style="padding: 14px; position: relative">
+                                        <h4>{{ game.name }}</h4>
+                                        <el-button
+                                                icon="el-icon-fanshun-biaoqian">{{ game.game_type.type_name }}</el-button>
+                                        <el-button
+                                                icon="el-icon-fanshun-rili">{{ game.create_time|date:"Y:m:d" }}</el-button>
+                                        <el-button icon="el-icon-fanshun-caiyouduo_liulanliang">
+                                            阅读数：{{ game.read_num }}</el-button>
 
-        <el-main>
-            <div class="col-sm-8 col-md-9">
-                <el-row :gutter="20">
-                    {% for game in games %}
-                        <el-tooltip placement="top" style="position: relative">
-                            <div slot="content">{{ game.introduction|safe|truncatechars:120 }}</div>
-                            <el-button>
-                                <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
-                                    <el-card :body-style="{ padding: '0px' }">
-                                        <img src="{{ game.get_content_img_url }}">
-                                        <div style="padding: 14px">
-                                            <h4>{{ game.name }}</h4>
-                                            <el-button
-                                                    icon="el-icon-fanshun-biaoqian">{{ game.game_type.type_name }}</el-button>
-                                            <el-button
-                                                    icon="el-icon-fanshun-rili">{{ game.create_time|date:"Y:m:d" }}</el-button>
-                                            <el-button icon="el-icon-fanshun-caiyouduo_liulanliang">
-                                                阅读数：{{ game.read_num }}</el-button>
-
-                                        </div>
-                                    </el-card>
-{#                                </el-col>#}
+                                    </div>
+                                </el-card>
+                                {#                                </el-col>#}
                             </a>
-                            </el-button>
-                        </el-tooltip>
-                    {% endfor %}
-                </el-row>
-                <div id="app" style="text-align:center">
-                    <el-tag effect="dark">
-                        共{{ games.paginator.object_list|length }}个游戏,当前页面游戏数为{{ games|length }}</el-tag>
-                    <el-pagination
-                            @current-change="handleCurrentChange"
-                            :current-page="{{ games.number }}"
-                            background
-                            :page-size="7"
-                            layout="prev, pager, next"
-                            :total="{{ games.paginator.object_list|length }}">
-                    </el-pagination>
+                    </el-tooltip>
+                {% endfor %}
+            </el-row>
+            <div id="app" style="text-align:center">
+                <el-tag effect="dark">
+                    共{{ games.paginator.object_list|length }}个游戏,当前页面游戏数为{{ games|length }}</el-tag>
+                <el-pagination
+                        @current-change="handleCurrentChange"
+                        :current-page="{{ games.number }}"
+                        background
+                        :page-size="7"
+                        layout="prev, pager, next"
+                        :total="{{ games.paginator.object_list|length }}">
+                </el-pagination>
 
+            </div>
+        </div>
+
+
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">游戏分类</div>
+                <div class="panel-body">
+                    <ul>
+                        <a href="{% url 'game_list' %}">所有游戏</a>
+                        {% for gametype in types %}
+                            <li>
+                                <a href="{% url 'get_game_name' gametype.type_name %}">{{ gametype.type_name }}({{ gametype.game_count }})</a>
+                            </li>
+                        {% empty %}
+                            <li>暂无分类</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-
-
-            <div class="col-sm-4 col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">游戏分类</div>
-                    <div class="panel-body">
-                        <ul>
-                            <a href="{% url 'game_list' %}">所有游戏</a>
-                            {% for gametype in types %}
-                                <li>
-                                    <a href="{% url 'get_game_name' gametype.type_name %}">{{ gametype.type_name }}({{ gametype.game_count }})</a>
-                                </li>
-                            {% empty %}
-                                <li>暂无分类</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">日期分类</div>
-                    <div class="panel-body">
-                        <ul>
-                            {% for time in game_date %}
-                                <li><a href="{% url 'game_with_date' time.year time.month %}">{{ time|date:"Y年n月" }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">日期分类</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for time in game_date %}
+                            <li><a href="{% url 'game_with_date' time.year time.month %}">{{ time|date:"Y年n月" }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
-        </el-main>
+        </div>
     </el-main>
 
 {% endblock %}

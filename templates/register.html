@@ -8,11 +8,85 @@
 {% block content %}
     <el-main>
         <el-main>
-            <form action="" method="POST">
-                {% csrf_token %}
-                {{ reg_form }}
-                <input type="submit" value="注册">
-            </form>
+
+            <el-col :span="9">
+                <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
+                    {% csrf_token %}
+                    {% if reg_form.non_field_errors %}
+                        <ol>
+                            {% for error in reg_form.non_field_errors %}
+                                <el-alert
+                                        title={{ error|escape }}
+                                                type="error">
+                                </el-alert>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                    <el-form-item prop="username">
+                        <el-input v-model="form.username" autocomplete="off"
+                                  name="username"
+                                  prefix-icon="el-icon-user-solid"
+                                  placeholder="User Name"
+                                  maxlength="10"
+                                  clearable></el-input>
+                    </el-form-item>
+
+                    <el-form-item prop="email">
+                        <el-input v-model="form.email" autocomplete="off" prefix-icon="el-icon-fanshun-185078emailmailstreamline"
+                                  placeholder="Enter Your email"
+                                  name="email"></el-input>
+                    </el-form-item>
+
+
+                    <el-form-item prop="password">
+                        <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
+                                  placeholder="Enter Your password"
+                                  name="password"
+                                  show-password></el-input>
+                    </el-form-item>
+
+                    <el-form-item prop="password_again">
+                        <el-input v-model="form.password_again" autocomplete="off" prefix-icon="el-icon-lock"
+                                  placeholder="Enter Your password again"
+                                  name="password_again"
+                                  show-password></el-input>
+                    </el-form-item>
+                    <el-form-item style="text-align: center">
+                        <el-button native-type="submit">REGISTERED</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+
+            {#            <form action="" method="POST">#}
+            {#                {% csrf_token %}#}
+            {#                {{ reg_form }}#}
+            {#                <input type="submit" value="注册">#}
+            {#            </form>#}
         </el-main>
     </el-main>
+{% endblock %}
+
+{% block Data %}
+    dialogLogInVisible: false,
+    form: {
+    username: '',
+    email: '',
+    password: '',
+    password_again: '',
+    delivery: false,
+    },
+    rules: {
+    username: [
+    {required: true, message: '账号不可为空', trigger: 'blur'}
+    ],
+    email: [
+    {required: true, message: '邮箱号不可为空', trigger: 'blur'}
+    ],
+    password: [
+    {required: true, message: '密码不可为空', trigger: 'blur'}
+    ],
+    password_again: [
+    {required: true, message: '确认密码不可为空', trigger: 'blur'}
+    ]
+    },
 {% endblock %}

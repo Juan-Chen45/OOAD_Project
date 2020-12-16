@@ -18,6 +18,10 @@
     padding: 0;
     float: right;
 }
+.el-card{
+    width: 30%;
+    height: 40% ;
+}
 
 img{
     width: 100%;
