@@ -50,14 +50,14 @@ def get_game_name(request, game_type_name):
     all_games = Game.objects.filter(game_type=type)
     context = get_game_common(request, all_games)
     context["name"] = game_type_name
-    return render(request, ("game_type_list.html"), context)
+    return render(request, "game_type_list.html", context)
 
 
 def game_with_date(request, year, month):
     all_games = Game.objects.filter(create_time__year=year, create_time__month=month)
     context = get_game_common(request, all_games)
     context["curr_time"] = "%s 年 %s 月" % (year, month)
-    return render(request, ("game_with_date.html"), context)
+    return render(request, "game_with_date.html", context)
 
 
 def get_game_common(request, all_games):

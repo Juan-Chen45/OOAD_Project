@@ -1,0 +1,46 @@
+{% extends 'developer/base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}''{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center">
+                        <h3>Welcome, developer {{ user.username }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!--
+                        <img src="{{ developer.avatar.url }}" height="250" width="250" alt="" class="img-circle">
+                        -->
+                        <h3> this is a avatar</h3>
+                        <br>
+                        <h4>{{ developer.introduction }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-lg-offset-1" style="text-align: center">
+                <img src="{% static '/pic/upload.png' %}" height="200" width="200" alt="">
+                <br><h2><a>upload game</a></h2><br>
+                <img src="{% static '/pic/info.png' %}" height="200" width="200" alt="">
+                <br><h2><a href="{% url 'modify message' user.username %}">change info</a></h2>
+            </div>
+            <div class="col-lg-3 col-lg-offset-1" style="text-align: center">
+                <img src="{% static '/pic/sale.png' %}" height="200" width="200" alt="">
+                <br><h2><a>sale</a></h2><br>
+                <img src="{% static '/pic/release.png' %}" height="200" width="200" alt="">
+                <br><h2><a>release branch/dlc</a></h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}

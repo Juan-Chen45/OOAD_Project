@@ -1,0 +1,23 @@
+{% extends 'developer/base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}''{% endblock %}
+
+{% block content %}
+
+{% for game in gamelist %}  
+<div class="col-lg-3 col-lg-offset-1" style="text-align: center">
+    <img src="{{ game.avatar.url }}" height="200" width="200" alt="">
+    <br><h2><a href="游戏商店页面"  target="opentype">{{game.name}}</a></h2><br>
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'developer/base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block nav_home_active %}''{% endblock %}
+
+{% block content %}
+<form role="form">
+    <div class="form-group">
+      <label for="game">选择游戏</label>
+      <select class="form-control" id="game">
+          {% for game in gamelist %}
+            <option>{{ game.name }}</option>
+          {% endfor %}
+      </select>
+    </div>
+</form>
+<div class="container-fluid">
+    <h3>设定折扣</h3>
+    <div class="panel-body">
+        <label for="price">price</label>
+        <input type="text" class="form-control" id="price" name="price" placeholder="请输入折扣后价格">
+
+        <label for="from_date">from date</label>
+        <input type="date" id="from_date" name="from_date">
+
+        <label for="to_date">to date</label>
+        <input type="date" id="to_date" name="to_date">
+
+        <button type="submit" class="btn btn-primary">
+            submit your discount
+        </button>
+    </div>
+</div>
+
+{% endblock %}

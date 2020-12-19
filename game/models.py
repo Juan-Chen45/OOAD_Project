@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from developer.models import Developer
 from read_statistic.models import ReadNum_Expand
 from ckeditor_uploader.fields import RichTextUploadingField
 from pyquery import PyQuery as pq
@@ -16,7 +17,7 @@ class Game(models.Model,ReadNum_Expand):
     name = models.CharField(max_length=50)
     game_type = models.ForeignKey(GameType, on_delete=models.DO_NOTHING)
     introduction = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(Developer, on_delete=models.DO_NOTHING)
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
     lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
     price = models.FloatField()
