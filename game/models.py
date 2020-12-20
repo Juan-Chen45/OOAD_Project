@@ -4,6 +4,8 @@ from developer.models import Developer
 from read_statistic.models import ReadNum_Expand
 from ckeditor_uploader.fields import RichTextUploadingField
 from pyquery import PyQuery as pq
+
+
 # Create your models here.
 
 class GameType(models.Model):
@@ -13,7 +15,7 @@ class GameType(models.Model):
         return self.type_name
 
 
-class Game(models.Model,ReadNum_Expand):
+class Game(models.Model, ReadNum_Expand):
     name = models.CharField(max_length=50)
     game_type = models.ForeignKey(GameType, on_delete=models.DO_NOTHING)
     introduction = models.TextField()
@@ -36,3 +38,49 @@ class Game(models.Model,ReadNum_Expand):
 
     class Meta:
         ordering = ["-create_time", ]
+
+
+class Version(models.Model, ReadNum_Expand):
+    name = models.CharField(max_length=50)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    introduction = models.TextField()
+    create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
+    lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
+    avatar = RichTextUploadingField()
+    file = models.FileField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ["-create_time", ]
+
+
+class DLC(Version):
+    price = models.FloatField()
+
+    class Meta:
+        ordering = ["-create_time", ]
+
+
+class Discount(models.Model):
+    VERSION = 'VERSION'
+    GAME = 'GAME'
+    DLC = 'DLC'
+    STATUS_CHOICES = [
+        (VERSION, 'VERSION'),
+        (GAME, 'GAME'),
+        (DLC, 'DLC'),
+    ]
+    status = models.CharField(
+        max_length=7,
+        choices=STATUS_CHOICES,
+        default=GAME,
+    )
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=True, null=True)
+    # blank=True null=True
+    version = models.ForeignKey(Version, on_delete=models.CASCADE, blank=True, null=True)
+    dlc = models.ForeignKey(DLC, on_delete=models.CASCADE, blank=True, null=True)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    price = models.FloatField()
