@@ -64,11 +64,10 @@ class DLC(Version):
 
 
 class Discount(models.Model):
-    VERSION = 'VERSION'
+    # 加入唯一约束
     GAME = 'GAME'
     DLC = 'DLC'
     STATUS_CHOICES = [
-        (VERSION, 'VERSION'),
         (GAME, 'GAME'),
         (DLC, 'DLC'),
     ]
@@ -79,7 +78,6 @@ class Discount(models.Model):
     )
     game = models.ForeignKey(Game, on_delete=models.CASCADE, blank=True, null=True)
     # blank=True null=True
-    version = models.ForeignKey(Version, on_delete=models.CASCADE, blank=True, null=True)
     dlc = models.ForeignKey(DLC, on_delete=models.CASCADE, blank=True, null=True)
     from_date = models.DateField()
     to_date = models.DateField()

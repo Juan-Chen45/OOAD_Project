@@ -7,10 +7,10 @@ from django.urls import reverse
 
 from comment.forms import CommentForm
 from comment.models import Comment
-from game.forms import GameRegisterForm
+from game.forms import GameRegisterForm, DiscountRegisterForm
 from developer.models import Developer
 from read_statistic.utils import cookie_read
-from .models import GameType, Game, Version, DLC
+from .models import GameType, Game, Version, DLC, Discount
 
 
 # Create your views here.
@@ -177,7 +177,7 @@ def regist_game(request):
             return render(request, "add_game.html", context)
     else:
         # 是 get
-        reg_form = GameRegisterForm(request.POST)
+        reg_form = GameRegisterForm()
         context = {}
         context["form"] = reg_form
         context["types"] = GameType.objects.filter()
@@ -208,9 +208,44 @@ def modify_game(request, game_name):
             return render(request, "modify_game.html", context)
     else:
         # 是 get
-        reg_form = GameRegisterForm(request.POST)
+        reg_form = GameRegisterForm()
         context = {}
         context["game"] = Game.objects.filter(name=game_name)
         context["form"] = reg_form
         context["types"] = GameType.objects.filter()
         return render(request, "modify_game.html", context)
+
+
+def set_discount(request, game_name):
+    # update or create
+    context = {}
+    game = Game.objects.filter(name=game_name)
+    dlcs = Game.objects.filter(game=game)
+    context["game"] = game
+    context["dlcs"] = dlcs
+    if request.method == "POST":
+        form = DiscountRegisterForm(request.POST)
+        if form.is_valid():
+            # 这里要改
+            from_date = form.cleaned_data["from_date"]
+            to_date = form.cleaned_data["to_date"]
+            price = form.cleaned_data["price"]
+
+            isDLC = request.POST.get("isGame", False)
+            if isDLC:
+                dlc = request.POST.get("dlc", None)
+                status = 'DLC'
+                discount = Discount.objects.update_or_create(from_date=from_date, to_date=to_date, price=price,
+                                                             status=status,dlc=dlc)
+            else:
+                status = 'GAME'
+                discount = Discount.objects.update_or_create(from_date=from_date, to_date=to_date, price=price,
+                                                             status=status, game=game)
+            discount.save()
+            # redirect 去的地址要改
+            return redirect(request.GET.get("from", reverse("home")))
+
+    else:
+        form = DiscountRegisterForm()
+        context["form"] = form
+    return render(request, "set_discount.html", context)

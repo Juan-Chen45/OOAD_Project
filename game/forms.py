@@ -17,3 +17,9 @@ class GameRegisterForm(forms.Form):
             raise forms.ValidationError("游戏名已存在")
         return name
 
+
+class DiscountRegisterForm(forms.Form):
+    # blank=True null=True
+    from_date = forms.DateField(label="开始时间")
+    to_date = forms.DateField(label="结束时间")
+    price = forms.FloatField(label="价格", min_value=0)

@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from .forms import LoginForm, RegisterForm
 from django.contrib.auth.models import User
+from user.models import ExtendUser
 
 
 def homepage(request):
@@ -44,7 +45,9 @@ def reguser(request):
             email = reg_form.cleaned_data["email"]
             password = reg_form.cleaned_data["password_again"]
             user = User.objects.create_user(username, email, password)
+            extendUser = ExtendUser.objects.create(user=user)
             user.save()
+            extendUser.save()
             login(request, user)
             return redirect(request.GET.get("from", reverse("home")))
     else:

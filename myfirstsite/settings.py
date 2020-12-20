@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "comment",
     "game",
     "developer",
+    "user",
 ]
 
 MIDDLEWARE = [
