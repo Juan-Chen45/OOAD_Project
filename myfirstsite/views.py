@@ -12,13 +12,14 @@ from user.models import ExtendUser
 
 
 def homepage(request):
+    all_games = Game.objects.all()
     ct = ContentType.objects.get_for_model(Game)
     data, days = get_7days_data(ct)
     today_hot_data = get_today_hot_data(ct)
 
     # 本地代码这里就不加缓存了，懒得了，后续可以加上
 
-    context = {'date': data, 'days': days, 'today_hot_data': today_hot_data}
+    context = {'date': data, 'days': days, 'today_hot_data': today_hot_data, 'games': all_games}
     return render(request, "home.html", context)
 
 

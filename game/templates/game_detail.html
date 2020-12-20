@@ -16,61 +16,73 @@
 {% endblock %}
 
 {% block content %}
-    <el-main>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-10 col-xs-offset-1">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <h3 class="game.name">{{ game.name }}</h3>
-                            <ul class="game_describe">
-                                <li>作者：{{ game.author }}</li>
-                                <li>发表日期：{{ game.create_time|date:"Y-m-d H:n:s" }}</li>
-                                <li>分类：<a
-                                        href="{% url 'get_game_name' game.game_type.type_name %}">{{ game.game_type }}</a>
-                                </li>
-                                <li>阅读数：{{ game.read_num }}</li>
-                            </ul>
-                            <div class="game_content">{{ game.introduction|safe }}</div>
-                            <div class="game_image">{{ game.avatar|safe }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-10 col-xs-offset-1">
-                    <div class="comment_area">
-                        <h3 class="comment_area_title">提交评论</h3>
-                        {% if user.is_authenticated %}
-                            {{ user.username }} 欢迎评论
-                            <form action="{% url "update_comment" %}" method="POST">
-                                {% csrf_token %}
-                                {% for field in comment_form %}
-                                    {{ field }}
-                                {% endfor %}
-                                <input type="submit" value="发表">
-                            </form>
-                        {% else %}
-                            未登录,登录后方可评论
-                            <a href="{% url "user_login" %}?from={{ request.get_full_path }}">登录</a>
-                            <a href="{% url "reguser" %}?from={{ request.get_full_path }}">注册</a>
-                        {% endif %}
-                    </div>
-                    <div class="comment_area">
-                        <h3 class="comment_area_title">评论区域</h3>
-                        {% for comment in comments %}
-                            <div>
-                                {{ comment.user.username }}
-                                {{ comment.create_time|date:"Y-m-d H:n:s" }}
-                                {# 富文本编辑要加这个才会显示#}
-                                {{ comment.text|safe }}
-                            </div>
-                        {% empty %}
-                            暂无评论
+    <div class="ac"
+         alt=""
+         style="background-image: url({{ game.get_content_img_url }});
+                 background-repeat: no-repeat;
+                 background-position:center center;
+                 background-size: cover;
+                 position: absolute;
+                 overflow-y: hidden;
+                 top: 0;
+                 right: 0;
+                 left: 0;
+                 width: 100%;
+                 height: 500px;"
+    >
+        <div style="height:100%;width:100%;background-image: -webkit-linear-gradient(left,#0f0f0f,rgba(0,0,0,0));"></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1"
+             style="height: 500px;width: 500px;
+                    top: 130px;
+                     left: 0;
+                     margin-left: 0;
+                     bottom: 0">
+            <h2 class="game.name" style="color: #FFFFFF;font-family: Open Sans,sans-serif;">{{ game.name }}</h2>
+            <div class="game_content" style="text-align: left;color: #FFFFFF;font-family: Open Sans,sans-serif;">{{ game.introduction|safe }}</div>
+        </div>
+        <ul class="game_describe">
+            <li>作者：{{ game.author }}</li>
+            <li>发表日期：{{ game.create_time|date:"Y-m-d H:n:s" }}</li>
+            <li>分类：<a
+                    href="{% url 'get_game_name' game.game_type.type_name %}">{{ game.game_type }}</a>
+            </li>
+            <li>阅读数：{{ game.read_num }}</li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <div class="comment_area">
+                <h3 class="comment_area_title">提交评论</h3>
+                {% if user.is_authenticated %}
+                    {{ user.username }} 欢迎评论
+                    <form action="{% url "update_comment" %}" method="POST">
+                        {% csrf_token %}
+                        {% for field in comment_form %}
+                            {{ field }}
                         {% endfor %}
+                        <input type="submit" value="发表">
+                    </form>
+                {% else %}
+                    未登录,登录后方可评论
+                    <a href="{% url "user_login" %}?from={{ request.get_full_path }}">登录</a>
+                    <a href="{% url "reguser" %}?from={{ request.get_full_path }}">注册</a>
+                {% endif %}
+            </div>
+            <div class="comment_area">
+                <h3 class="comment_area_title">评论区域</h3>
+                {% for comment in comments %}
+                    <div>
+                        {{ comment.user.username }}
+                        {{ comment.create_time|date:"Y-m-d H:n:s" }}
+                        {# 富文本编辑要加这个才会显示#}
+                        {{ comment.text|safe }}
                     </div>
-                </div>
+                {% empty %}
+                    暂无评论
+                {% endfor %}
             </div>
         </div>
-    </el-main>
+    </div>
 {% endblock %}

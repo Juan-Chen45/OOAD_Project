@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "13260001",
+      "name": "log-out",
+      "font_class": "log-out",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
       "icon_id": "141405",
       "name": "185078 - email mail streamline",
       "font_class": "185078emailmailstreamline",

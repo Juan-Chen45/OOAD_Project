@@ -21,19 +21,18 @@
     <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
 
 
-
     <title>{% block title %}{% endblock %}</title>
 </head>
 
 
-<body>
+<body style="background-color: #EDF1F2">
 <div id="app" style="height: 100%">
 
-    <el-container style="height: 100%; border: 1px solid #eee" direction="vertical">
+    <el-container style="height: 100%; border: 1px solid #eee">
         <el-aside width="280px" style="background-color: rgb(238, 241, 246)">
             <el-menu class="el-menu-vertical-demo" style="height: 100%"
                      active-text-color="#409EFF"
-                     background-color="#000000"
+                     background-color="#1E262C"
                      text-color="#B7B7B7">
                 <li style="text-align: center">
                     <a href="{% url 'home' %}" style="text-decoration:none">
@@ -63,9 +62,16 @@
                             <i class="el-icon-user-solid"></i>
                             <span slot="title">Account</span>
                         </template>
-                        <el-menu-item index="4-1">View My Profile</el-menu-item>
+                        <el-menu-item index="4-1">
+                            <el-avatar
+                                    src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                            View My Profile
+                        </el-menu-item>
                         <a href="{% url "logout" %}" style="text-decoration:none">
-                            <el-menu-item index="4-2">Log out</el-menu-item>
+                            <el-menu-item index="4-2">
+                                <i class="el-icon-fanshun-log-out"></i>
+                                Log out
+                            </el-menu-item>
                         </a>
                     </el-submenu>
                 {% else %}
@@ -85,9 +91,9 @@
             </el-menu>
         </el-aside>
 
-    <el-main class="MainBlock">
-        {% block content %}{% endblock %}
-    </el-main>
+        <el-main class="MainBlock" style="padding: 0">
+            {% block content %}{% endblock %}
+        </el-main>
 
     </el-container>
 </div>

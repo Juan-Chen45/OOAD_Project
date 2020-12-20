@@ -14,24 +14,13 @@
 {% endblock %}
 
 {% block content %}
-        <el-carousel :interval="5000" arrow="always" style="text-align: center; align-content: center">
+    <el-main style="padding: 0">
+
+        <el-carousel trigger="click" height="550px" style="padding: 0">
             {% for hotdata in today_hot_data %}
                 <el-carousel-item>
                     <a style="text-decoration: none" href="{% url 'game_detail' hotdata.content_object.pk %}">
                         <div style="height: 100%;position: relative;display: inline-block;">
-                            <div class="img-tip"
-                                 style="font-size: x-large;position: absolute;bottom: 0;background: #333;color: white;opacity: 0.6;">
-                                <div>
-                                    <el-button style="width: 100%;border-width: 0px;border-radius: 0px; ">
-                                        {{ hotdata.content_object.name|safe }}
-                                    </el-button>
-                                </div>
-                                <div>
-                                    <el-button icon="el-icon-fanshun-caiyouduo_liulanliang"
-                                               style="width: 100%;border-width: 0px;border-radius: 0px;">
-                                        阅读数：{{ hotdata.read_num }}</el-button>
-                                </div>
-                            </div>
                             <img class="back-img" style="background-color: gray;height: 100%"
                                  alt=""
                                  src="{{ hotdata.content_object.get_content_img_url }}">
@@ -39,8 +28,35 @@
                     </a>
                 </el-carousel-item>
             {% endfor %}
-
         </el-carousel>
+    </el-main>
+
+
+    <el-main>
+        <el-row :gutter="30" style="height: 400px">
+            {% for game in games %}
+                <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" style="height: 500px; border-color: #EDF1F2">
+                    <div>
+                        <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
+                            <div
+                                 style="background-image: url({{ game.get_content_img_url }});
+                                         background-repeat: no-repeat;
+                                         background-position:center center;
+                                         background-size: cover;
+                                         height: 400px;"
+                            ></div>
+                            <div style="padding: 14px; position: absolute">
+                                <h4>{{ game.name }}</h4>
+                                {{ game.game_type.type_name }}
+                                {{ game.create_time|date:"Y:m:d" }}
+                            </div>
+                        </a>
+
+                    </div>
+                </el-col>
+            {% endfor %}
+        </el-row>
+    </el-main>
 {% endblock %}
 
 {% block JS %}

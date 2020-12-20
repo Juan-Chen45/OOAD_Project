@@ -20,27 +20,30 @@
 
     <el-main>
         <div class="col-sm-8 col-md-9">
-            <el-row :gutter="20">
-                {% for game in games %}
-                    <el-tooltip placement="top" style="position: relative">
-                        <div slot="content">{{ game.introduction|safe|truncatechars:120 }}</div>
-                            <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
-                                <el-card :body-style="{ padding: '0px' }">
-                                    <img src="{{ game.get_content_img_url }}" alt="">
-                                    <div style="padding: 14px; position: relative">
-                                        <h4>{{ game.name }}</h4>
-                                        <el-button
-                                                icon="el-icon-fanshun-biaoqian">{{ game.game_type.type_name }}</el-button>
-                                        <el-button
-                                                icon="el-icon-fanshun-rili">{{ game.create_time|date:"Y:m:d" }}</el-button>
-                                        <el-button icon="el-icon-fanshun-caiyouduo_liulanliang">
-                                            阅读数：{{ game.read_num }}</el-button>
 
-                                    </div>
-                                </el-card>
-                                {#                                </el-col>#}
+            <el-row :gutter="30" style="height: 300px">
+
+                {% for game in games %}
+                    <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" style="height: 400px; border-color: #EDF1F2">
+                        <div>
+                            <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
+                                <img class="ac"
+                                          alt=""
+                                          style="background-image: url({{ game.get_content_img_url }});
+                                                  background-repeat: no-repeat;
+                                                  background-position:center center;
+                                                  background-size: cover;
+                                                  height: 300px;"
+                                >
+                                <div style="padding: 14px; position: absolute">
+                                    <h4>{{ game.name }}</h4>
+                                    {{ game.game_type.type_name }}
+                                    {{ game.create_time|date:"Y:m:d" }}
+                                </div>
                             </a>
-                    </el-tooltip>
+
+                        </div>
+                    </el-col>
                 {% endfor %}
             </el-row>
             <div id="app" style="text-align:center">
