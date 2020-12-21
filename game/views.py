@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
+from django.template.context_processors import csrf
 from django.urls import reverse
 
 from comment.forms import CommentForm

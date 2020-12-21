@@ -1,60 +1,30 @@
-{% extends 'game_base.html' %}
-
 <!DOCTYPE html>
 <html lang="en">
-
-{% block content %}
 <head>
-    <meta charset="UTF-8">
-    <title>modify</title>
+    <title>data update</title>
 </head>
 <body>
-<el-main>
-<el-col :span="9">
-                <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
-                    {% csrf_token %}
-                    {% if reg_form.non_field_errors %}
-                        <ol>
-                            {% for error in reg_form.non_field_errors %}
-                                <el-alert
-                                        title={{ error|escape }}
-                                                type="error">
-                                </el-alert>
-                            {% endfor %}
-                        </ol>
-                    {% endif %}
+{% block content %}
+<form action="" method="post", enctype="multipart/form-data">
+{% csrf_token %}
 
-<el-form-item prop="name">
-    <el-input v-model="form.name" autocomplete="off"
-              name="name"
-              prefix-icon="el-icon-user-solid"
-              placeholder="User Name"
-              maxlength="10"
-              clearable></el-input>
-</el-form-item>
-<el-form-item prop="avatar">
-    <el-input v-model="form.avatar" autocomplete="off"
-              name="avatar"
-              clearable></el-input>
-</el-form-item>
-</el-form>
-</el-col>
-</el-main>
+{% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label }} {{ field }}
+    </div>
+
+{% endfor %}
+    <div class="form-group">
+         <label for="introduction">用户简介:</label>
+         <textarea class="form-control" rows="3"></textarea>
+     </div>
+<div class="form-group">
+    <label for="avatar">头像上传</label>
+    <input type="file" id="avatar" name="avatar" >
+</div>
+    <button type="submit" value="Submit">上传</button>
+</form>
+{% endblock %}
 </body>
-{% endblock %}
-{% block Data %}
-    dialogLogInVisible: false,
-    form: {
-    name: '',
-    avatar: None,
-    },
-    rules: {
-    name: [
-    {required: true, message: '名字不可为空', trigger: 'blur'}
-    ],
-    avatar: [
-    {required: true, message: '头像不可为空', trigger: 'blur'}
-    ],
-    },
-{% endblock %}
 </html>
