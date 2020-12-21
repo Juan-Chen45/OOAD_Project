@@ -12,7 +12,7 @@ def user_home(request):
     context = {}
     context['user'] = request.user
     context['extendUser'] = ExtendUser.objects.get(user=request.user)
-    context['games'] = context['extendUser'].game
+    context['games'] = context['extendUser'].game.all()
 
     return render(request, 'user_home.html', context)
 

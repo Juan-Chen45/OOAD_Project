@@ -4,8 +4,9 @@ from game.models import Game
 from django.contrib.auth.models import User
 
 
-def developer_home(request, name):
-    context = {'user': User.objects.get(username=name)}
+def developer_home(request):
+    user = request.user
+    context = {'user': user}
     context['developer'] = Developer.objects.get(user=context['user'])
     return render(request, 'developer/developer_home.html', context)
 
