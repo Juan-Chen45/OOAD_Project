@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>data update</title>
+</head>
+<body>
+{% block content %}
+<form action="" method="post", enctype="multipart/form-data">
+{% csrf_token %}
+
+{% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label }} {{ field }}
+    </div>
+
+{% endfor %}
+
+    <button type="submit" value="Submit">上传</button>
+</form>
+{% endblock %}
+</body>
+</html>
