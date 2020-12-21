@@ -1,4 +1,4 @@
-{% extends 'developer/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}
@@ -31,17 +31,29 @@
                     <h3>Modify message</h3>
                 </div>
                 <div class="panel-body">
-                <label for="name">name</label>
-                <input type="text" class="form-control" id="name" placeholder="请输入名字">
+
+
+
                 <form role="form">
+
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="fieldWrapper">
+                            {{ field.errors }}
+                            {{ field.label }} {{ field }}
+                        </div>
+
+                    {% endfor %}
                     <div class="form-group">
-                      <label for="introduction">Developer introduction:</label>
-                      <textarea class="form-control" rows="3"></textarea>
+                      <label for="introduction">Developer introduction:
+                            <textarea class="form-control" rows="3"></textarea>
+                        </label>
                     </div>
-                  </form>
                 <button type="submit" class="btn btn-primary">
                     submit your change
                 </button>
+                </form>
                 </div>
             </div>
         </div>

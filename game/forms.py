@@ -8,7 +8,7 @@ class GameRegisterForm(forms.Form):
     name = forms.CharField(label="游戏名", max_length=20, min_length=3,
                            widget=forms.TextInput(attrs={"placeholder": "请输入游戏名"}))
     price = forms.FloatField(label="价格", min_value=0)
-    avatar = forms.ImageField(label="封面", allow_empty_file=True)
+    #avatar = forms.ImageField(label="封面", allow_empty_file=True)
 
     # 在clean验证的时候其实可以根据每一个不同的字段进行验证的
     def clean_name(self):

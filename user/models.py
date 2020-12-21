@@ -10,9 +10,9 @@ class ExtendUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     introduction = models.CharField(max_length=300)
     create_date = models.DateTimeField(auto_now_add=True)
-    friend = models.ManyToManyField('self')
-    game = models.ManyToManyField(Game)
-    dlc = models.ManyToManyField(DLC)
+    friend = models.ManyToManyField('self', blank=True)
+    game = models.ManyToManyField(Game, blank=True)
+    dlc = models.ManyToManyField(DLC, blank=True)
     avatar = RichTextUploadingField()
 
     def get_content_img_url(self):
@@ -27,4 +27,4 @@ class ExtendUser(models.Model):
         return self.user.get_username()
 
     class Meta:
-        ordering = ['create_date',]
+        ordering = ['create_date', ]
