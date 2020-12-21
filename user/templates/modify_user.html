@@ -1,0 +1,60 @@
+{% extends 'game_base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>modify</title>
+</head>
+<body>
+<el-main>
+<el-col :span="9">
+                <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
+                    {% csrf_token %}
+                    {% if reg_form.non_field_errors %}
+                        <ol>
+                            {% for error in reg_form.non_field_errors %}
+                                <el-alert
+                                        title={{ error|escape }}
+                                                type="error">
+                                </el-alert>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+
+<el-form-item prop="name">
+    <el-input v-model="form.name" autocomplete="off"
+              name="name"
+              prefix-icon="el-icon-user-solid"
+              placeholder="User Name"
+              maxlength="10"
+              clearable></el-input>
+</el-form-item>
+<el-form-item prop="avatar">
+    <el-input v-model="form.avatar" autocomplete="off"
+              name="avatar"
+              clearable></el-input>
+</el-form-item>
+</el-form>
+</el-col>
+</el-main>
+</body>
+{% endblock %}
+{% block Data %}
+    dialogLogInVisible: false,
+    form: {
+    name: '',
+    avatar: None,
+    },
+    rules: {
+    name: [
+    {required: true, message: '名字不可为空', trigger: 'blur'}
+    ],
+    avatar: [
+    {required: true, message: '头像不可为空', trigger: 'blur'}
+    ],
+    },
+{% endblock %}
+</html>
