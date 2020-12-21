@@ -9,8 +9,8 @@
     <el-main>
         <el-main>
 
-            <el-col :span="9">
-                <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
+            <el-col :span="9" style="margin-left: 20%">
+                <el-form :model="form" :rules="rules" action="" ref="form" status-icon method="POST" size="medium">
                     {% csrf_token %}
                     {% if reg_form.non_field_errors %}
                         <ol>
@@ -28,31 +28,33 @@
                                   prefix-icon="el-icon-user-solid"
                                   placeholder="User Name"
                                   maxlength="10"
-                                  clearable></el-input>
+                        ></el-input>
                     </el-form-item>
 
                     <el-form-item prop="email">
-                        <el-input v-model="form.email" autocomplete="off" prefix-icon="el-icon-fanshun-185078emailmailstreamline"
+                        <el-input v-model="form.email" autocomplete="off"
+                                  prefix-icon="el-icon-fanshun-185078emailmailstreamline"
                                   placeholder="Enter Your email"
                                   name="email"></el-input>
                     </el-form-item>
 
 
-                    <el-form-item prop="password">
-                        <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
+                    <el-form-item prop="pass">
+                        <el-input v-model="form.pass" autocomplete="off" prefix-icon="el-icon-lock"
                                   placeholder="Enter Your password"
                                   name="password"
                                   show-password></el-input>
                     </el-form-item>
 
-                    <el-form-item prop="password_again">
-                        <el-input v-model="form.password_again" autocomplete="off" prefix-icon="el-icon-lock"
+                    <el-form-item prop="checkPass">
+                        <el-input v-model="form.checkPass" autocomplete="off" prefix-icon="el-icon-lock"
                                   placeholder="Enter Your password again"
                                   name="password_again"
                                   show-password></el-input>
                     </el-form-item>
                     <el-form-item style="text-align: center">
-                        <el-button native-type="submit">REGISTERED</el-button>
+                        <el-button type="primary" native-type="submit">REGISTERED</el-button>
+                        <el-button @click="resetForm('form')">重置</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -60,27 +62,74 @@
     </el-main>
 {% endblock %}
 
+{% block Const %}
+    const validatePass = (rule, value, callback) => {
+    if (value === '') {
+    callback(new Error('请输入密码'));
+    } else {
+    if (this.form.checkPass !== '') {
+    this.$refs.form.validateField('checkPass');
+    }
+    callback();
+    }
+    };
+    const validatePass2 = (rule, value, callback) => {
+    if (value === '') {
+    callback(new Error('请再次输入密码'));
+    } else if (value !== this.form.pass) {
+    callback(new Error('两次输入密码不一致!'));
+    } else {
+    callback();
+    }
+    };
+    const validateEmail = (rule, value, callback) => {
+    if (value === '') {
+    callback(new Error('请输入邮箱!'));
+    } else if (!/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((.[a-zA-Z0-9_-]{2,3}){1,2})$/.test(value)) {
+    callback(new Error('输入邮箱格式错误!'));
+    } else {
+    callback();
+    }
+    };
+    const validateUser = (rule, value, callback) => {
+    if (value === '') {
+    callback(new Error('请输入用户名!'));
+    } else {
+    callback();
+    }
+    };
+
+{% endblock %}
+
 {% block Data %}
-    dialogLogInVisible: false,
-    form: {
-    username: '',
-    email: '',
-    password: '',
-    password_again: '',
-    delivery: false,
-    },
     rules: {
-    username: [
-    {required: true, message: '账号不可为空', trigger: 'blur'}
+    pass: [
+    {validator: validatePass, trigger: 'blur'}
+    ],
+    checkPass: [
+    {validator: validatePass2, trigger: 'blur'}
     ],
     email: [
-    {required: true, message: '邮箱号不可为空', trigger: 'blur'}
+    {validator: validateEmail, trigger: 'blur'}
     ],
-    password: [
-    {required: true, message: '密码不可为空', trigger: 'blur'}
+    username: [
+    {validator: validateUser, trigger: 'blur'}
     ],
-    password_again: [
-    {required: true, message: '确认密码不可为空', trigger: 'blur'}
-    ]
+    },
+{% endblock %}
+
+{% block Method %}
+    submitForm(formName) {
+    this.$refs[formName].validate((valid) => {
+    if (valid) {
+    alert('submit!');
+    } else {
+    console.log('error submit!!');
+    return false;
+    }
+    });
+    },
+    resetForm(formName) {
+    this.$refs[formName].resetFields();
     },
 {% endblock %}

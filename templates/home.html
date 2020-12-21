@@ -14,22 +14,19 @@
 {% endblock %}
 
 {% block content %}
-    <el-main style="padding: 0">
-
-        <el-carousel trigger="click" height="550px" style="padding: 0">
-            {% for hotdata in today_hot_data %}
-                <el-carousel-item>
-                    <a style="text-decoration: none" href="{% url 'game_detail' hotdata.content_object.pk %}">
-                        <div style="height: 100%;position: relative;display: inline-block;">
-                            <img class="back-img" style="background-color: gray;height: 100%"
-                                 alt=""
-                                 src="{{ hotdata.content_object.get_content_img_url }}">
-                        </div>
-                    </a>
-                </el-carousel-item>
-            {% endfor %}
-        </el-carousel>
-    </el-main>
+    <el-carousel trigger="click" height="400px" style="padding: 0">
+        {% for hotdata in today_hot_data %}
+            <el-carousel-item>
+                <a style="text-decoration: none" href="{% url 'game_detail' hotdata.content_object.pk %}">
+                    <div style="height: 100%;position: relative;display: inline-block;">
+                        <img class="back-img" style="background-color: gray;height: 100%"
+                             alt=""
+                             src="{{ hotdata.content_object.get_content_img_url }}">
+                    </div>
+                </a>
+            </el-carousel-item>
+        {% endfor %}
+    </el-carousel>
 
 
     <el-main>
@@ -39,11 +36,12 @@
                     <div>
                         <a href="{% url 'game_detail' game.pk %}" style="text-decoration: none">
                             <div
-                                 style="background-image: url({{ game.get_content_img_url }});
-                                         background-repeat: no-repeat;
-                                         background-position:center center;
-                                         background-size: cover;
-                                         height: 400px;"
+                                    style="background-image: url({{ game.get_content_img_url }});
+                                            background-repeat: no-repeat;
+                                            background-position:center center;
+                                            border-radius: 10px;
+                                            background-size: cover;
+                                            height: 400px;"
                             ></div>
                             <div style="padding: 14px; position: absolute">
                                 <h4>{{ game.name }}</h4>
