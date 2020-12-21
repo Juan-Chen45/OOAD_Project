@@ -1,12 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+{% block link_extends %}
+    {% load static %}
+    <link rel="stylesheet" href="/static/css/game_detail.css">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>profiles details</title>
 </head>
 <body>
 <div>
-    nihao
+    {% if user.is_authenticated %}
+        <h3>user name:{{ user.username }}</h3>
+        <h3>user introduction:{{ extendUser.introduction }}</h3>
+
+    {% else %}
+        未登录
+        <a href="{% url "user_login" %}?from={{ request.get_full_path }}">登录</a>
+        <a href="{% url "reguser" %}?from={{ request.get_full_path }}">注册</a>
+    {% endif %}
+    {% for game in games %}
+        <h3> {{ game.name }}</h3>
+    {% endfor %}
 </div>
 </body>
 </html>
+{% endblock %}

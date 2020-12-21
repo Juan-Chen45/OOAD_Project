@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.template.context_processors import csrf
+
 from user.models import ExtendUser
 from game.models import Game
 from django.contrib.auth.models import User
@@ -12,20 +14,22 @@ def user_home(request):
     context = {}
     context['user'] = request.user
     context['extendUser'] = ExtendUser.objects.get(user=request.user)
-    context['games'] = context['extendUser'].game
+    context['games'] = context['extendUser'].game.all()
 
     return render(request, 'user_home.html', context)
 
 
 def modify_user(request):
     user = request.user
-    extend = ExtendUser.objects.filter(user=user)
+    extend = ExtendUser.objects.filter(user=user).first()
+    context = {}
+    context.update(csrf(request))
     if request.method == "POST":
         reg_form = UserModifyForm(request.POST)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
             user.username = reg_form.cleaned_data["name"]
-            extend.avatar = reg_form.cleaned_data["avatar"]
+            extend.avatar = request.FILES.get('avatar',extend.avatar)
             extend.introduction = request.POST.get('introduction', extend.introduction)
             user.save()
             extend.save()
@@ -34,8 +38,7 @@ def modify_user(request):
     else:
         # 是 get
         reg_form = UserModifyForm()
-        context = {}
-        context["user"] = user
-        context["extend"] = extend
-        context["form"] = reg_form
-        return render(request, "modify_user.html", context)
+    context["user"] = user
+    context["extend"] = extend
+    context["form"] = reg_form
+    return render(request, "modify_user.html", context)
