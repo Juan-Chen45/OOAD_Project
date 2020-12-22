@@ -101,9 +101,17 @@
 <script>
     const Main = {
         data() {
-            return {
-                {% block Data %}{% endblock %}
+            {% block Const %}{% endblock %}
 
+            return {
+                form: {
+                    username: '',
+                    email: '',
+                    pass: '',
+                    checkPass: '',
+                    delivery: false,
+                },
+                {% block Data %}{% endblock %}
 
             };
         },
@@ -112,6 +120,7 @@
             handleCurrentChange(val) {
                 window.location.href = "?page= " + val;
             },
+
         },
     };
     const Ctor = Vue.extend(Main);

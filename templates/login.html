@@ -6,47 +6,44 @@
 
 
 {% block content %}
+    <el-main style="width: 100%;height: 100%">
+        {# 这里要记得把url原样的提交回去才能找到之前你访问的页面   #}
+        {% if not user.is_authenticated %}
+            <el-col :span="10" style="padding: 30px;margin-left: 20%">
+                <el-form :model="form" :rules="rules" action="" method="POST" size="medium"
+                >
+                    {% csrf_token %}
+                    {% if login_form.non_field_errors %}
+                        <ol>
+                            {% for error in login_form.non_field_errors %}
+                                <el-alert
+                                        title={{ error|escape }}
+                                                type="error">
+                                </el-alert>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                    <el-form-item prop="username">
+                        <el-input v-model="form.username" autocomplete="off"
+                                  name="username"
+                                  prefix-icon="el-icon-user-solid"
+                                  placeholder="User Name"
+                                  maxlength="10"
+                                  clearable></el-input>
+                    </el-form-item>
 
-    <el-main>
-        <el-main>
-
-            {# 这里要记得把url原样的提交回去才能找到之前你访问的页面   #}
-            {% if not user.is_authenticated %}
-                <el-col :span="9" >
-                    <el-form :model="form" :rules="rules" action="" method="POST" size="medium">
-                        {% csrf_token %}
-                        {% if login_form.non_field_errors %}
-                            <ol>
-                                {% for error in login_form.non_field_errors %}
-                                    <el-alert
-                                            title={{ error|escape }}
-                                                    type="error">
-                                    </el-alert>
-                                {% endfor %}
-                            </ol>
-                        {% endif %}
-                        <el-form-item prop="username">
-                            <el-input v-model="form.username" autocomplete="off"
-                                      name="username"
-                                      prefix-icon="el-icon-user-solid"
-                                      placeholder="User Name"
-                                      maxlength="10"
-                                      clearable></el-input>
-                        </el-form-item>
-
-                        <el-form-item prop="password">
-                            <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
-                                      placeholder="Enter Your Passwords"
-                                      name="password"
-                                      show-password></el-input>
-                        </el-form-item>
-                        <el-form-item style="text-align: center">
-                            <el-button native-type="submit">SIGN IN</el-button>
-                        </el-form-item>
-                    </el-form>
-                </el-col>
-            {% endif %}
-        </el-main>
+                    <el-form-item prop="password">
+                        <el-input v-model="form.password" autocomplete="off" prefix-icon="el-icon-lock"
+                                  placeholder="Enter Your Passwords"
+                                  name="password"
+                                  show-password></el-input>
+                    </el-form-item>
+                    <el-form-item style="text-align: center">
+                        <el-button native-type="submit">SIGN IN</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        {% endif %}
     </el-main>
 {% endblock %}
 

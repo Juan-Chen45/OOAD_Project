@@ -34,7 +34,7 @@ html, body, #app, .el-container {
     bottom: 0;
 }
 
-#MainBlock {
+.MainBlock {
     position: absolute;
     left: 280px;
     right: 0;
