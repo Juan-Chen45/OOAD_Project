@@ -167,11 +167,12 @@ def regist_game(request):
             introduction = request.POST.get('introduction', '')
             author = Developer.objects.filter(user=request.user)
             price = reg_form.cleaned_data["price"]
+            typelist=reg_form.cleaned_data['type']
             avatar = request.FILES.get('avatar', None)
             # game = Game.objects.create(name=name, game_type=game_type, introduction=introduction, author=author,
             #                           price=price, avatar=avatar)
             game = Game.objects.create(name=name, introduction=introduction, author=author,
-                                       price=price, avatar=avatar)
+                                       price=price, avatar=avatar,game_type=typelist)
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("home")))
@@ -198,7 +199,7 @@ def modify_game(request, game_name):
         if reg_form.is_valid():
             game = Game.objects.filter(name=game_name)
             game.name = reg_form.cleaned_data["name"]
-            # game.game_type = request.POST.get('game_type', game.game_type)
+            game.game_type.set(reg_form.cleaned_data['type'])
             game.introduction = request.POST.get('introduction', game.introduction)
             game.author = Developer.objects.filter(user=request.user)
             game.price = reg_form.cleaned_data["price"]
@@ -225,7 +226,7 @@ def set_discount(request, game_name):
     # update or create
     context = {}
     context.update(csrf(request))
-    game = Game.objects.filter(name=game_name)
+    game = Game.objects.get(name=game_name)
     dlcs = DLC.objects.filter(game=game)
     context["game"] = game
     context["dlcs"] = dlcs
@@ -236,11 +237,9 @@ def set_discount(request, game_name):
             from_date = form.cleaned_data["from_date"]
             to_date = form.cleaned_data["to_date"]
             price = form.cleaned_data["price"]
-            # 未加入复选框
-            # isDLC = request.POST.get("isGame", False)
-            isDLC = False
+            isDLC = form.cleaned_data["is_dlc"]
             if isDLC:
-                dlc = request.POST.get("dlc", None)
+                dlc = form.cleaned_data["dlcs"]
                 status = 'DLC'
                 discount = Discount.objects.update_or_create(from_date=from_date, to_date=to_date, price=price,
                                                              status=status, dlc=dlc)
@@ -255,5 +254,6 @@ def set_discount(request, game_name):
             context["form"] = form
     else:
         form = DiscountRegisterForm()
+        form.set_fields(dlcs)
         context["form"] = form
     return render(request, "set_discount.html", context)
