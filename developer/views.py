@@ -19,7 +19,7 @@ def developer_message(request, name):
     user = User.objects.get(username=name)
     context = {}
     context['developer'] = Developer.objects.get(user=user)
-    gamelist = Game.objects.filter(developer=context['developer'])
+    gamelist = Game.objects.filter(author=context['developer'])
     context['games'] = gamelist
 
     return render(request, 'developer_message.html', context)
@@ -39,7 +39,7 @@ def modify_developer_message(request):
         if reg_form.is_valid():
             user.username = reg_form.cleaned_data["name"]
             developer.avatar = request.FILES.get('avatar', developer.avatar)
-            developer.introduction = request.POST.get('introduction', developer.introduction)
+            developer.introduction = reg_form.cleaned_data["introduction"]
             user.save()
             developer.save()
             # redirect 去的地址要改
@@ -50,4 +50,13 @@ def modify_developer_message(request):
     context["form"] = reg_form
     return render(request, "modify_developer_message.html", context)
 
-# 加入developer看自己持有的游戏 修改游戏
+
+def game_select(request):
+    user = request.user
+    developer = Developer.objects.get(user=user)
+    game_list = Game.objects.filter(author=developer).all()
+    context = {}
+    context['user'] = user
+    context['developer'] = developer
+    context['game_list'] = game_list
+    return render(request, "game_select.html", context)

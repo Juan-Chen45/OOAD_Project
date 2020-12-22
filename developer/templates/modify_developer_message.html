@@ -34,7 +34,7 @@
 
 
 
-                <form role="form">
+                <form action="" method="post" , enctype="multipart/form-data">
 
                     {% csrf_token %}
 
@@ -45,11 +45,6 @@
                         </div>
 
                     {% endfor %}
-                    <div class="form-group">
-                      <label for="introduction">Developer introduction:
-                            <textarea class="form-control" rows="3"></textarea>
-                        </label>
-                    </div>
                 <button type="submit" class="btn btn-primary">
                     submit your change
                 </button>

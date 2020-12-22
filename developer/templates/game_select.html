@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    SUSTC gamer
+{% endblock %}
+
+{% block header_extends %}
+    <link rel="stylesheet" href="{% static 'css/developer_games.css' %}">
+{% endblock %}
+
+{% block nav_games_active %}active{% endblock %}
+
+{% block content %}
+    <div class="col-lg-8">
+        <table id="games">
+            <caption>
+                <h2>Game List</h2>
+            </caption>
+            <tr>
+                <th>cover</th>
+                <th>name</th>
+                <th>instruction</th>
+                <th>create date</th>
+                <th>operation</th>
+            </tr>
+            {% for game in game_list %}
+                <tr>
+                    <td>
+                        <img src="{{ game.avatar.url }}" height="50" width="80">
+                    </td>
+                    <td>{{ game.name }}</td>
+                    <td>{{ game.introduction }}</td>
+                    <td>{{ game.create_date }}</td>
+                    <td>
+                        <a href="{% url 'modify_game' game.name%}">
+                            <button type="button" class="btn btn-primary">管理游戏</button>
+                        </a>
+                        <a href="{% url 'set_discount' game.name %}">
+                            <button type="button" class="btn btn-primary">打折</button>
+                        </a>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">添加dlc</button>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <a href="{% url 'regist_game'%}">
+            <button type="button" class="btn btn-primary">添加游戏</button>
+        </a>
+        <a href="{% url 'developer home' %}">
+            <button type="button" class="btn btn-primary">返回</button>
+        </a>
+    </div>
+{% endblock %}
