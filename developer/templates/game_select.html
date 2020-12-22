@@ -1,18 +1,51 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block title %}
-    SUSTC gamer
-{% endblock %}
-
-{% block header_extends %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Game</title>
     <link rel="stylesheet" href="{% static 'css/developer_games.css' %}">
-{% endblock %}
-
-{% block nav_games_active %}active{% endblock %}
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'jquery-1.12.4.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    {% block header_extends %}{% endblock %}
+</head>
+<body>
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'home' %}">SUSTC GAMER</a>
+            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+    </div>
+</div>
 
 {% block content %}
-    <div class="col-lg-8">
+    <div class="container-fluid">
+        <div class="row" >
+        <div class="col-lg-3" style="text-align: center">
+                <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align: center">
+                        <h3>Welcome, developer {{ user.username }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <!--
+                        <img src="{{ developer.avatar.url }}" height="250" width="250" alt="" class="img-circle">
+                        -->
+                        <h3>this is a avatar</h3>
+                        <br>
+                        <h4>{{ developer.introduction }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
         <table id="games">
             <caption>
                 <h2>Game List</h2>
@@ -47,11 +80,12 @@
             {% endfor %}
         </table>
 
-        <a href="{% url 'regist_game'%}">
-            <button type="button" class="btn btn-primary">添加游戏</button>
-        </a>
         <a href="{% url 'developer home' %}">
             <button type="button" class="btn btn-primary">返回</button>
         </a>
     </div>
+</div>
+    </div>
+
+
 {% endblock %}
