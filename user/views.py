@@ -13,9 +13,8 @@ from django.urls import reverse
 def user_home(request):
     context = {}
     context['user'] = request.user
-    context['extendUser'] = get_object_or_404(ExtendUser, user=user)
+    context['extendUser'] = get_object_or_404(ExtendUser, user=request.user)
     context['games'] = context['extendUser'].game.all()
-
     return render(request, 'user_home.html', context)
 
 
