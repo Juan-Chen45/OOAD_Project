@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib.contenttypes.models import ContentType
 from game.models import Game
-
+from developer.models import Developer
 from read_statistic.utils import get_7days_data, get_today_hot_data
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.urls import reverse
 from .forms import LoginForm, RegisterForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from user.models import ExtendUser
 
 
@@ -16,10 +16,8 @@ def homepage(request):
     ct = ContentType.objects.get_for_model(Game)
     data, days = get_7days_data(ct)
     today_hot_data = get_today_hot_data(ct)
-
-    # 本地代码这里就不加缓存了，懒得了，后续可以加上
-
     context = {'date': data, 'days': days, 'today_hot_data': today_hot_data, 'games': all_games}
+
     return render(request, "home.html", context)
 
 
@@ -29,8 +27,13 @@ def user_login(request):
         # 验证过了，说明用户验证也成功了
         if login_form.is_valid():
             user = login_form.cleaned_data["user"]
-            login(request, user)
-            return redirect(request.GET.get("from", reverse("home")))
+            # 由此可以让developer直接登录到自己的界面
+            if(hasattr(user,"developer")):
+                login(request, user)
+                return redirect("/developer/")
+            elif(hasattr(user,"extenduser")):
+                login(request, user)
+                return redirect(request.GET.get("from", reverse("home")))
     else:
         login_form = LoginForm()
     context = {"login_form": login_form}

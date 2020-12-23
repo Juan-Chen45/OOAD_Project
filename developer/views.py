@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import csrf
-
 from .models import Developer
 from game.models import Game, DLC, Version
 from django.contrib.auth.models import User
@@ -21,7 +20,6 @@ def developer_message(request, name):
     context['developer'] = get_object_or_404(Developer, user=request.user)
     gamelist = Game.objects.filter(author=context['developer'])
     context['games'] = gamelist
-
     return render(request, 'developer_message.html', context)
 
 
