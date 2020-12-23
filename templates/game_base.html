@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     {% block link_extends %}{% endblock %}  <!--用来让别人来填写引用-->
     <!-- import CSS -->
     <link rel="stylesheet" href="/static/css/index.css">
@@ -62,7 +61,6 @@
                             <i class="el-icon-user-solid"></i>
                             <span slot="title">Account</span>
                         </template>
-
                         <a href="{% url "user_home" %}" style="text-decoration:none">
                             <el-menu-item index="4-1">
                                 <el-avatar
@@ -105,14 +103,29 @@
     const Main = {
         data() {
             {% block Const %}{% endblock %}
-
+            const cityOptions = ['RPG', 'SLG', 'MOBA', 'FPS'];
             return {
+                imageUrl: '',
                 form: {
                     username: '',
                     email: '',
                     pass: '',
                     checkPass: '',
                     delivery: false,
+                },
+                userForm: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: '',
+                    checkAll: false,
+                    checkedCities: [],
+                    cities: cityOptions,
+                    isIndeterminate: true,
                 },
                 {% block Data %}{% endblock %}
 
@@ -123,7 +136,29 @@
             handleCurrentChange(val) {
                 window.location.href = "?page= " + val;
             },
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
 
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }, handleCheckAllChange(val) {
+                this.checkedCities = val ? cityOptions : [];
+                this.isIndeterminate = false;
+            },
+            handleCheckedCitiesChange(value) {
+                let checkedCount = value.length;
+                this.checkAll = checkedCount === this.cities.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+            },
         },
     };
     const Ctor = Vue.extend(Main);
@@ -133,6 +168,40 @@
 {% block JS %}
 
 {% endblock %}
+
+<style>
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 100px;
+        height: 100px;
+        display: block;
+    }
+
+    .input.file {
+        display: none;
+    }
+
+</style>
 </body>
 </html>
 

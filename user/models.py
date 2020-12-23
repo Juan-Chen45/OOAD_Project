@@ -16,6 +16,7 @@ class ExtendUser(models.Model):
     avatar = RichTextUploadingField()
     account = models.FloatField()
 
+
     def get_content_img_url(self):
         temp = ExtendUser.objects.filter(pk=str(self.id)).values('avatar')  # values 获取 Article 数据表中的 content 字段内容
         html = pq(temp[0]['avatar'])  # pq 方法获取编辑器 html 内容

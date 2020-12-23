@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     {% if reg_form.non_field_errors %}
                         <ol>
-                            {% for error in reg_form.non_field_errors %}
+                            {% for error in reg_form.ValidationError %}
                                 <el-alert
                                         title={{ error|escape }}
                                                 type="error">

@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="f0f0e5f1-99c2-49d9-982a-7309507019bf">
+    <data-source source="LOCAL" name="db" uuid="d322a71a-34e9-4986-a5e8-0b0e78f5e6b0">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
+      <remarks>$PROJECT_DIR$/myfirstsite/settings.py</remarks>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Santyelegy\PycharmProjects\OOAD_Project\db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:F:\CODE\Projects\ooad\db.sqlite3</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
         </library>
       </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="Django default" uuid="b96ccb85-47c0-404a-86bf-9ba86ca1337a">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/myfirstsite/settings.py</remarks>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:F:\CODE\Projects\ooad\db.sqlite3</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
 </project>
