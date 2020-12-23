@@ -3,7 +3,6 @@ from django.conf.global_settings import MEDIA_ROOT
 from django.db import models
 from django.contrib.auth.models import User
 from pyquery import PyQuery as pq
-
 import os
 import uuid
 

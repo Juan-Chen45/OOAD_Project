@@ -1,6 +1,3 @@
-import os
-
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.context_processors import csrf
 
