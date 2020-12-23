@@ -2,12 +2,13 @@ from django import forms
 from django.contrib import auth
 from django.contrib.auth.models import User
 from developer.models import Developer
+from ckeditor_uploader.fields import RichTextUploadingFormField
 
 
 class UserModifyForm(forms.Form):
     name = forms.CharField(label="用户名", max_length=20, min_length=3,
                            widget=forms.TextInput(attrs={"placeholder": "请输入用户名"}))
-    introduction = forms.CharField(label="开发商介绍",widget=forms.TextInput(attrs={"placeholder": "请输入介绍"}))
+    introduction = forms.CharField(label="开发商介绍", widget=forms.TextInput(attrs={"placeholder": "请输入介绍"}))
 
     avatar = forms.ImageField(label="封面")
 

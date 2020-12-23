@@ -25,7 +25,7 @@ class DocumentationHelp(models.Model):
 
 class Developer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    account = models.CharField(max_length=30)
+    account = models.FloatField()
     introduction = models.CharField(max_length=300)
     create_date = models.DateTimeField(auto_now_add=True)
     avatar = RichTextUploadingField()

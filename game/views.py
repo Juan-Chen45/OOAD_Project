@@ -308,21 +308,26 @@ def set_discount(request, game_name):
 # 加入购买功能(考虑给user加入余额属性?)
 def purchase_game(request, game_name):
     context = {}
+    context.update(csrf(request))
     game = Game.objects.get(name=game_name)
     context['game'] = game
     context['version'] = Version.objects.filter(game=game)
     context['user'] = request.user
     extend = get_object_or_404(ExtendUser, user=context['user'])
+    context['extend'] = extend
     if request.method == 'POST':
         # 买了
         # 判断是否购买成功
-        success = True
+        success = extend.account > game.price
         if success:
+            extend.account = extend.account - game.price
             developer = game.author
             developer.account += game.price
             developer.save()
-            games = extend.game.all()
-            extend.game.set(games.append(game))
+            game_list = [game]
+            for g in extend.game.all():
+                game_list.append(g)
+            extend.game.set(game_list)
             extend.save()
             return redirect("game_detail", game.pk)
         else:
@@ -333,6 +338,7 @@ def purchase_game(request, game_name):
 
 def purchase_dlc(request, dlc_name):
     context = {}
+    context.update(csrf(request))
     dlc = DLC.objects.get(name=dlc_name)
     context['dlc'] = dlc
     context['user'] = request.user
@@ -340,13 +346,16 @@ def purchase_dlc(request, dlc_name):
     if request.method == 'POST':
         # 买了
         # 判断是否购买成功
-        success = True
+        success = extend.account > dlc.price
         if success:
+            extend.account = extend.account - dlc.price
             developer = dlc.author
             developer.account += dlc.price
             developer.save()
-            dlc = extend.dlc.all()
-            extend.dlc.set(dlc.append(dlc))
+            dlc_list = [dlc]
+            for g in extend.dlc.all():
+                dlc_list.append(g)
+            extend.game.set(game_list)
             extend.save()
             return redirect("dlc_detail", dlc.pk)
         else:

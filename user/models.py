@@ -14,6 +14,7 @@ class ExtendUser(models.Model):
     game = models.ManyToManyField(Game, blank=True)
     dlc = models.ManyToManyField(DLC, blank=True)
     avatar = RichTextUploadingField()
+    account = models.FloatField()
 
     def get_content_img_url(self):
         temp = ExtendUser.objects.filter(pk=str(self.id)).values('avatar')  # values 获取 Article 数据表中的 content 字段内容
