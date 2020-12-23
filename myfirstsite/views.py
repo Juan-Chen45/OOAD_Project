@@ -16,10 +16,15 @@ def homepage(request):
     ct = ContentType.objects.get_for_model(Game)
     data, days = get_7days_data(ct)
     today_hot_data = get_today_hot_data(ct)
+    user = request.user
     context = {'date': data, 'days': days, 'today_hot_data': today_hot_data, 'games': all_games}
 
-    return render(request, "home.html", context)
+    if(hasattr(user,"developer")):
+        login(request, user)
+    elif(hasattr(user,"extenduser")):
+        login(request, user)
 
+    return render(request, "home.html", context)
 
 def user_login(request):
     if request.method == "POST":
@@ -28,12 +33,13 @@ def user_login(request):
         if login_form.is_valid():
             user = login_form.cleaned_data["user"]
             # 由此可以让developer直接登录到自己的界面
-            if(hasattr(user,"developer")):
-                login(request, user)
-                return redirect("/developer/")
-            elif(hasattr(user,"extenduser")):
-                login(request, user)
-                return redirect(request.GET.get("from", reverse("home")))
+            # if(hasattr(user,"developer")):
+            #     login(request, user)
+            #     return redirect("/developer/")
+            # elif(hasattr(user,"extenduser")):
+            #     login(request, user)
+            login(request, user)
+            return redirect(request.GET.get("from", reverse("home")))
     else:
         login_form = LoginForm()
     context = {"login_form": login_form}
