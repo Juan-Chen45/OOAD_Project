@@ -9,7 +9,7 @@ from django.urls import reverse
 from comment.forms import CommentForm
 from comment.models import Comment
 from user.models import ExtendUser
-from game.forms import GameRegisterForm, DiscountRegisterForm
+from game.forms import GameRegisterForm, DiscountRegisterForm, DLCRegisterForm, BranchRegisterForm
 from developer.models import Developer
 from read_statistic.utils import cookie_read
 from .models import GameType, Game, Version, DLC, Discount
@@ -26,11 +26,11 @@ def game_list(request):
 def game_detail(request, game_id):
     currgame = get_object_or_404(Game, pk=game_id)
     user = request.user
-    extend = ExtendUser.objects.get(user=user)
+    extend = get_object_or_404(ExtendUser, user=user)
     purchased = False
     for game in extend.game.all():
-        if game.pk==game_id:
-            purchased=True
+        if game.pk == game_id:
+            purchased = True
             break
 
     # 获得这个game对应的comment
@@ -166,9 +166,9 @@ def dlc_detail(request, dlc_id):
 def regist_game(request):
     context = {}
     context.update(csrf(request))
-    context['developer'] = Developer.objects.get(user=request.user)
+    context['developer'] = get_object_or_404(Developer, user=request.user)
     if request.method == "POST":
-        reg_form = GameRegisterForm(request.POST)
+        reg_form = GameRegisterForm(request.POST, request.FILES)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
             name = reg_form.cleaned_data["name"]
@@ -177,7 +177,7 @@ def regist_game(request):
             author = Developer.objects.get(user=request.user)
             price = reg_form.cleaned_data["price"]
             typelist = reg_form.cleaned_data['type']
-            avatar = request.FILES.get('avatar', None)
+            avatar = reg_form.cleaned_data['avatar']
             game = Game.objects.create(name=name, introduction=introduction, author=author,
                                        price=price, avatar=avatar, game_type=typelist)
             game.save()
@@ -197,12 +197,46 @@ def regist_game(request):
         return render(request, "add_game.html", context)
 
 
+def add_dlc(request, game_name):
+    context = {}
+    context.update(csrf(request))
+    developer = get_object_or_404(Developer, user=request.user)
+    game = Game.objects.get(name=game_name)
+    context['developer'] = developer
+    context['game'] = game
+    if request.method == "POST":
+        reg_form = DLCRegisterForm(request.POST, request.FILES)
+        # 验证过了，说明用户验证也成功了
+        if reg_form.is_valid():
+            name = reg_form.cleaned_data["name"]
+            # 还未在html里加入这个复选框
+            introduction = reg_form.cleaned_data["introduction"]
+            price = reg_form.cleaned_data["price"]
+            avatar = reg_form.cleaned_data['avatar']
+            file = reg_form.cleaned_data['file']
+            dlc = DLC.objects.create(name=name, price=price, game=game, introduction=introduction, avatar=avatar,
+                                     file=file)
+            dlc.save()
+            # redirect 去的地址要改
+            return redirect("game select")
+        else:
+
+            context["form"] = reg_form
+            # context["clear_errors"] = reg_form.errors.get("__all__")
+            return render(request, "add_dlc.html", context)
+    else:
+        # 是 get
+        reg_form = DLCRegisterForm()
+        context["form"] = reg_form
+        return render(request, "add_dlc.html", context)
+
+
 def modify_game(request, game_name):
     context = {}
     context.update(csrf(request))
-    context['developer'] = Developer.objects.get(user=request.user)
+    context['developer'] = get_object_or_404(Developer, user=request.user)
     if request.method == "POST":
-        reg_form = GameRegisterForm(request.POST)
+        reg_form = GameRegisterForm(request.POST, request.FILES)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
             game = Game.objects.filter(name=game_name)
@@ -211,7 +245,7 @@ def modify_game(request, game_name):
             game.introduction = request.POST.get('introduction', game.introduction)
             game.author = Developer.objects.get(user=request.user)
             game.price = reg_form.cleaned_data["price"]
-            game.avatar = request.FILES.get('avatar', game.avatar)
+            game.avatar = reg_form.cleaned_data['avatar']
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("home")))
@@ -236,7 +270,7 @@ def set_discount(request, game_name):
     context.update(csrf(request))
     game = Game.objects.get(name=game_name)
     dlcs = DLC.objects.filter(game=game)
-    developer = Developer.objects.get(user=request.user)
+    developer = get_object_or_404(Developer, user=request.user)
     context["game"] = game
     context["dlcs"] = dlcs
     context['developer'] = developer
@@ -278,6 +312,7 @@ def purchase_game(request, game_name):
     context['game'] = game
     context['version'] = Version.objects.filter(game=game)
     context['user'] = request.user
+    extend = get_object_or_404(ExtendUser, user=context['user'])
     if request.method == 'POST':
         # 买了
         # 判断是否购买成功
@@ -286,6 +321,9 @@ def purchase_game(request, game_name):
             developer = game.author
             developer.account += game.price
             developer.save()
+            games = extend.game.all()
+            extend.game.set(games.append(game))
+            extend.save()
             return redirect("game_detail", game.pk)
         else:
             return redirect("purchase fail")
@@ -298,6 +336,7 @@ def purchase_dlc(request, dlc_name):
     dlc = DLC.objects.get(name=dlc_name)
     context['dlc'] = dlc
     context['user'] = request.user
+    extend = get_object_or_404(ExtendUser, user=context['user'])
     if request.method == 'POST':
         # 买了
         # 判断是否购买成功
@@ -306,8 +345,44 @@ def purchase_dlc(request, dlc_name):
             developer = dlc.author
             developer.account += dlc.price
             developer.save()
+            dlc = extend.dlc.all()
+            extend.dlc.set(dlc.append(dlc))
+            extend.save()
             return redirect("dlc_detail", dlc.pk)
         else:
             return redirect("purchase fail")
     else:
         return render(request, 'purchase_dlc.html', context)
+
+
+def add_branch(request, game_name):
+    context = {}
+    context.update(csrf(request))
+    developer = get_object_or_404(Developer, user=request.user)
+    game = Game.objects.get(name=game_name)
+    context['developer'] = developer
+    context['game'] = game
+    if request.method == "POST":
+        reg_form = BranchRegisterForm(request.POST, request.FILES)
+        # 验证过了，说明用户验证也成功了
+        if reg_form.is_valid():
+            name = reg_form.cleaned_data["name"]
+            # 还未在html里加入这个复选框
+            introduction = reg_form.cleaned_data["introduction"]
+            avatar = reg_form.cleaned_data['avatar']
+            file = reg_form.cleaned_data['file']
+            branch = Version.objects.create(name=name, game=game, introduction=introduction, avatar=avatar,
+                                            file=file)
+            branch.save()
+            # redirect 去的地址要改
+            return redirect("game select")
+        else:
+
+            context["form"] = reg_form
+            # context["clear_errors"] = reg_form.errors.get("__all__")
+            return render(request, "add_dlc.html", context)
+    else:
+        # 是 get
+        reg_form = BranchRegisterForm()
+        context["form"] = reg_form
+        return render(request, "add_dlc.html", context)

@@ -9,7 +9,7 @@ class UserModifyForm(forms.Form):
                            widget=forms.TextInput(attrs={"placeholder": "请输入用户名"}))
     introduction = forms.CharField(label="开发商介绍",widget=forms.TextInput(attrs={"placeholder": "请输入介绍"}))
 
-    # avatar = forms.ImageField(label="封面", allow_empty_file=True)
+    avatar = forms.ImageField(label="封面", allow_empty_file=True)
 
     def clean_name(self):
         name = self.cleaned_data["name"]
