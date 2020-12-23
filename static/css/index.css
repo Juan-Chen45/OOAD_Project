@@ -9336,7 +9336,7 @@
 }
 
 .el-upload__input {
-    display: none
+    display: none !important;
 }
 
 .el-upload__tip {
