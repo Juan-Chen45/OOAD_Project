@@ -7,6 +7,8 @@
 
 {% block header_extends %}
     <link rel="stylesheet" href="{% static 'home.css' %}">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 {% endblock %}
 
 {% block nav_home_active %}''{% endblock %}
@@ -38,8 +40,8 @@
             <div class="col-lg-3 col-lg-offset-1" style="text-align: center">
                 <img src="{% static '/pic/release.png' %}" height="200" width="200" alt="">
                 <br><h2><a href="{% url 'game select' %}">modify owned games</a></h2><br>
-                <img src="{% static '/pic/sale.png' %}" height="200" width="200" alt="">
-                <br><h2><a >view profit</a></h2>
+                <img src="{% static '/pic/release.png' %}" height="200" width="200" alt="">
+                <br><h2><a href="{% url 'dlc select' %}">manage dlc/branches</a></h2>
             </div>
         </div>
     </div>

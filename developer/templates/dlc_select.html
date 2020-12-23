@@ -48,9 +48,9 @@
                 </div>
             </div>
             <div class="col-lg-8">
-        <table id="games">
+        <table id="DLCs">
             <caption>
-                <h2>Game List</h2>
+                <h2>DLC List</h2>
             </caption>
             <tr>
                 <th>cover</th>
@@ -59,26 +59,49 @@
                 <th>create date</th>
                 <th>operation</th>
             </tr>
-            {% for game in game_list %}
+            {% for dlc in dlc_list %}
                 <tr>
                     <td>
-                        <img src="{{ game.avatar.url }}" height="50" width="80">
+                        <img src="{{ dlc.avatar.url }}" height="50" width="80">
                     </td>
-                    <td>{{ game.name }}</td>
-                    <td>{{ game.introduction }}</td>
-                    <td>{{ game.create_date }}</td>
+                    <td>{{ dlc.name }}</td>
+                    <td>{{ dlc.introduction }}</td>
+                    <td>{{ dlc.create_time }}</td>
                     <td>
-                        <a href="{% url 'modify_game' game.name%}">
-                            <button type="button" class="btn btn-primary">管理游戏</button>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">管理DLC</button>
                         </a>
-                        <a href="{% url 'set_discount' game.name %}">
+                        <a href="">
                             <button type="button" class="btn btn-primary">打折</button>
                         </a>
-                        <a href="{% url 'add dlc' game.name %}">
-                            <button type="button" class="btn btn-primary">添加dlc</button>
-                        </a>
-                        <a href="{% url 'add branch' game.name %}">
-                            <button type="button" class="btn btn-primary">添加branch</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+        <div class="col-lg-8">
+        <table id="Branchs">
+            <caption>
+                <h2>Branch List</h2>
+            </caption>
+            <tr>
+                <th>cover</th>
+                <th>name</th>
+                <th>instruction</th>
+                <th>create date</th>
+                <th>operation</th>
+            </tr>
+            {% for dlc in brach_list %}
+                <tr>
+                    <td>
+                        <img src="{{ dlc.avatar.url }}" height="50" width="80">
+                    </td>
+                    <td>{{ dlc.name }}</td>
+                    <td>{{ dlc.introduction }}</td>
+                    <td>{{ dlc.create_time }}</td>
+                    <td>
+                        <a href="">
+                            <button type="button" class="btn btn-primary">管理Branch</button>
                         </a>
                     </td>
                 </tr>

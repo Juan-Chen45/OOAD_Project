@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import csrf
 
 from .models import Developer
-from game.models import Game
+from game.models import Game, DLC, Version
 from django.contrib.auth.models import User
 from developer.forms import UserModifyForm
 
@@ -10,7 +10,7 @@ from developer.forms import UserModifyForm
 def developer_home(request):
     user = request.user
     context = {'user': user}
-    context['developer'] = Developer.objects.get(user=context['user'])
+    context['developer'] = get_object_or_404(Developer, user=request.user)
     return render(request, 'developer_home.html', context)
 
 
@@ -18,7 +18,7 @@ def developer_home(request):
 def developer_message(request, name):
     user = User.objects.get(username=name)
     context = {}
-    context['developer'] = Developer.objects.get(user=user)
+    context['developer'] = get_object_or_404(Developer, user=request.user)
     gamelist = Game.objects.filter(author=context['developer'])
     context['games'] = gamelist
 
@@ -30,15 +30,15 @@ def modify_developer_message(request):
     context = {}
     context.update(csrf(request))
     user = request.user
-    developer = Developer.objects.get(user=user)
+    developer = get_object_or_404(Developer, user=request.user)
     context['user'] = user
     context['developer'] = developer
     if request.method == "POST":
-        reg_form = UserModifyForm(request.POST)
+        reg_form = UserModifyForm(request.POST, request.FILES)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
             user.username = reg_form.cleaned_data["name"]
-            developer.avatar = request.FILES.get('avatar', developer.avatar)
+            developer.avatar = reg_form.cleaned_data['avatar']
             developer.introduction = reg_form.cleaned_data["introduction"]
             user.save()
             developer.save()
@@ -53,10 +53,31 @@ def modify_developer_message(request):
 
 def game_select(request):
     user = request.user
-    developer = Developer.objects.get(user=user)
+    developer = get_object_or_404(Developer,user=request.user)
     game_list = Game.objects.filter(author=developer).all()
     context = {}
     context['user'] = user
     context['developer'] = developer
     context['game_list'] = game_list
     return render(request, "game_select.html", context)
+
+
+def dlc_select(request):
+    user = request.user
+    developer = get_object_or_404(Developer,user=request.user)
+    game_list = Game.objects.filter(author=developer).all()
+    context = {}
+    dlc_list = []
+    branch_list = []
+    for game in game_list:
+        dlcs = DLC.objects.filter(game=game)
+        branchs = Version.objects.filter(game=game)
+        for dlc in dlcs:
+            dlc_list.append(dlc)
+        for branch in branchs:
+            branch_list.append(branch)
+        context['user'] = user
+        context['developer'] = developer
+        context['dlc_list'] = dlc_list
+        context['brach_list'] = branch_list
+    return render(request, "dlc_select.html", context)
