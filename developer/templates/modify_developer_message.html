@@ -50,8 +50,8 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <div class="panel panel-success input-lg-8">
-                <div class="panel-heading">修改用户信息</div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">修改用户信息</div>
                     <div class="panel-body">
                         <form action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -67,9 +67,7 @@
                             {% endfor %}
 
                             <input type="hidden" name="curruser" value="{{ user.username }}">
-                            <button type="submit" class="btn btn-success">
-                                提交
-                            </button>
+                            <button type="submit" class="btn btn-success">提交</button>
                             <a href="{% url 'developer home' %}">
                                 <button type="button" class="btn btn-primary">返回</button>
                             </a>
