@@ -14,7 +14,7 @@ class ExtendUser(models.Model):
     game = models.ManyToManyField(Game, blank=True)
     dlc = models.ManyToManyField(DLC, blank=True)
     # 此处修改为ImageField类型
-    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/", default='upload/2020/12/21/sketchpad.png')
+    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/", default='avatar/defaultAv.png')
     account = models.FloatField(default=0)
 
 

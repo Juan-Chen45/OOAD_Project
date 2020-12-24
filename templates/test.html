@@ -17,70 +17,85 @@
 <body style="height: 100%">
 
 <div id="app">
-<el-upload
-  class="avatar-uploader"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess"
-  :before-upload="beforeAvatarUpload">
-  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-</el-upload>
+    <center id="game">
+        <script language="javascript">
+            var str1 = '/upload_swf/ftp6/fanyiss/20110808/18.swf';
+            document.write("<OBJECT ID='flashgame' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0' width='550' height='450'>");
+            document.write("<PARAM NAME='allowScriptAccess' VALUE='always'>");
+            document.write("<PARAM NAME='movie' VALUE='" + webServer + str1 + "'>");
+            document.write("<embed id='flashgame1' name='flashgame' src='" + webServer + str1 + "' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' type='application/x-shockwave-flash' width='550' height='450' allowScriptAccess='always'></embed>");
+            document.write("<PARAM NAME='quality' VALUE='high'>");
+            document.write("</OBJECT>");</script>
+        <object id="flashgame" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+                codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0"
+                width="550" height="450">
+            <param name="allowScriptAccess" value="always">
+            <param name="movie" value="http://s6.4399.com:8080/4399swf/upload_swf/ftp6/fanyiss/20110808/18.swf">
+            <embed id="flashgame1" name="flashgame"
+                   src="http://s6.4399.com:8080/4399swf/upload_swf/ftp6/fanyiss/20110808/18.swf" quality="high"
+                   pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash"
+                   width="550" height="450" allowscriptaccess="always" style="width: 550px; height: 450px;">
+            <param name="quality" value="high">
+        </object>
+    </center>
 </div>
 </body>
 <style>
-.avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
 
 </style>
 <script>
     var Main = {
-    data() {
-      return {
-        imageUrl: ''
-      };
-    },
-    methods: {
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
+        data() {
+            return {
+                imageUrl: ''
+            };
+        },
+        methods: {
+            handleAvatarSuccess(res, file) {
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
         }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      }
     }
-  }
-var Ctor = Vue.extend(Main)
-new Ctor().$mount('#app')
+    var Ctor = Vue.extend(Main)
+    new Ctor().$mount('#app')
 </script>
 
 </html>

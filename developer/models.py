@@ -25,10 +25,9 @@ class DocumentationHelp(models.Model):
 class Developer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     account = models.FloatField(default=0)
-    introduction = models.CharField(max_length=300)
+    introduction = models.CharField(max_length=300, default="创造ing")
     create_date = models.DateTimeField(auto_now_add=True)
-    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/",default='upload/2020/12/21/sketchpad.png')
-
+    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/", default='avatar/defaultAv.png')
 
     def get_content_img_url(self):
         temp = Developer.objects.filter(pk=str(self.id)).values('avatar')  # values 获取 Article 数据表中的 content 字段内容
@@ -42,4 +41,4 @@ class Developer(models.Model):
         return self.user.get_username()
 
     class Meta:
-        ordering = ['-create_date',]
+        ordering = ['-create_date', ]
