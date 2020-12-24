@@ -6,7 +6,6 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.context_processors import csrf
 from django.urls import reverse
-
 from comment.forms import CommentForm
 from comment.models import Comment
 from user.models import ExtendUser
@@ -181,8 +180,9 @@ def regist_game(request):
             price = reg_form.cleaned_data["price"]
             typelist = reg_form.cleaned_data['type']
             avatar = reg_form.cleaned_data['avatar']
+            files = reg_form.cleaned_data["files"]
             game = Game.objects.create(name=name, introduction=introduction, author=author,
-                                       price=price, avatar=avatar, game_type=typelist)
+                                       price=price, avatar=avatar, game_type=typelist,files = files)
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("home")))
