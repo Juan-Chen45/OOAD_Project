@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count
@@ -26,12 +27,16 @@ def game_list(request):
 def game_detail(request, game_id):
     currgame = get_object_or_404(Game, pk=game_id)
     user = request.user
-    extend = get_object_or_404(ExtendUser, user=user)
-    purchased = False
-    for game in extend.game.all():
-        if game.pk == game_id:
-            purchased = True
-            break
+    context = {}
+    # 此处樊顺需要注意，没有登录的用户浏览的时候是看不到purchase的
+    if(not isinstance(user,AnonymousUser)):
+        extend = get_object_or_404(ExtendUser, user=user)
+        purchased = False
+        for game in extend.game.all():
+            if game.pk == game_id:
+                purchased = True
+                break
+        context["purchased"] = purchased
 
     # 获得这个game对应的comment
 
@@ -40,9 +45,7 @@ def game_detail(request, game_id):
 
     cookie_key = cookie_read(request, currgame)
 
-    context = {}
     context["game"] = currgame
-    context["purchased"] = purchased
     context["previous_game"] = Game.objects.filter(create_time__gt=currgame.create_time).last()
     context["next_game"] = Game.objects.filter(create_time__lt=currgame.create_time).first()
     context["dlcs"] = DLC.objects.filter(game=currgame)
