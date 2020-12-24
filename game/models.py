@@ -18,12 +18,13 @@ class GameType(models.Model):
 class Game(models.Model, ReadNum_Expand):
     name = models.CharField(max_length=50)
     game_type = models.ForeignKey(GameType, on_delete=models.DO_NOTHING)
-    introduction = models.TextField()
+    introduction = models.TextField(default="")
     author = models.ForeignKey(Developer, on_delete=models.DO_NOTHING)
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
     lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
-    price = models.FloatField()
-    avatar = RichTextUploadingField()
+    price = models.FloatField(default=0)
+    avatar = models.ImageField(upload_to="game_image/%Y/%m/%d/")
+    files = models.FileField(upload_to="game_file/%Y/%m/%d/",null=True)
 
     def get_content_img_url(self):
         temp = Game.objects.filter(pk=str(self.id)).values('avatar')  # values 获取 Article 数据表中的 content 字段内容
