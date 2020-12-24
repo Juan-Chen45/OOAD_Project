@@ -43,7 +43,6 @@ def game_detail(request, game_id):
     comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
 
     cookie_key = cookie_read(request, currgame)
-
     context["game"] = currgame
     context["previous_game"] = Game.objects.filter(create_time__gt=currgame.create_time).last()
     context["next_game"] = Game.objects.filter(create_time__lt=currgame.create_time).first()
@@ -105,64 +104,64 @@ def get_game_common(request, all_games):
     return context
 
 
-# version 的介绍页面
-def version_detail(request, version_id):
-    currversion = get_object_or_404(Version, pk=version_id)
-
-    # 获得这个game对应的comment
-
-    # game_content_type = ContentType.objects.get_for_model(currgame)
-    # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
-    cookie_key = cookie_read(request, currversion)
-
-    context = {}
-    context["game"] = currversion
-    context["previous_game"] = Version.objects.filter(game=currversion.game).filter(
-        create_time__gt=currversion.create_time).last()
-    context["next_game"] = Version.objects.filter(game=currversion.game).filter(
-        create_time__lt=currversion.create_time).first()
-    # context["comments"] = comments
-
-    # 用来初始化CommentForm里面的一些参数
-    # data = {}
-    # data["content_type"] = game_content_type.model
-    # data["object_id"] = game_id
-    # context["comment_form"] = CommentForm(initial=data)
-
-    response = render(request, "version_detail.html", context)
-    response.set_cookie(cookie_key, 'true')
-
-    return response
-
-
-# dlc的介绍页面
-def dlc_detail(request, dlc_id):
-    currversion = get_object_or_404(DLC, pk=dlc_id)
-
-    # 获得这个game对应的comment
-
-    # game_content_type = ContentType.objects.get_for_model(currgame)
-    # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
-    cookie_key = cookie_read(request, currversion)
-
-    context = {}
-    context["game"] = currversion
-    context["previous_game"] = DLC.objects.filter(game=currversion.game).filter(
-        create_time__gt=currversion.create_time).last()
-    context["next_game"] = DLC.objects.filter(game=currversion.game).filter(
-        create_time__lt=currversion.create_time).first()
-    # context["comments"] = comments
-
-    # 用来初始化CommentForm里面的一些参数
-    # data = {}
-    # data["content_type"] = game_content_type.model
-    # data["object_id"] = game_id
-    # context["comment_form"] = CommentForm(initial=data)
-
-    response = render(request, "dlc_detail.html", context)
-    response.set_cookie(cookie_key, 'true')
-
-    return response
+# # version 的介绍页面
+# def version_detail(request, version_id):
+#     currversion = get_object_or_404(Version, pk=version_id)
+#
+#     # 获得这个game对应的comment
+#
+#     # game_content_type = ContentType.objects.get_for_model(currgame)
+#     # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
+#     cookie_key = cookie_read(request, currversion)
+#
+#     context = {}
+#     context["game"] = currversion
+#     context["previous_game"] = Version.objects.filter(game=currversion.game).filter(
+#         create_time__gt=currversion.create_time).last()
+#     context["next_game"] = Version.objects.filter(game=currversion.game).filter(
+#         create_time__lt=currversion.create_time).first()
+#     # context["comments"] = comments
+#
+#     # 用来初始化CommentForm里面的一些参数
+#     # data = {}
+#     # data["content_type"] = game_content_type.model
+#     # data["object_id"] = game_id
+#     # context["comment_form"] = CommentForm(initial=data)
+#
+#     response = render(request, "version_detail.html", context)
+#     response.set_cookie(cookie_key, 'true')
+#
+#     return response
+#
+#
+# # dlc的介绍页面
+# def dlc_detail(request, dlc_id):
+#     currversion = get_object_or_404(DLC, pk=dlc_id)
+#
+#     # 获得这个game对应的comment
+#
+#     # game_content_type = ContentType.objects.get_for_model(currgame)
+#     # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
+#     cookie_key = cookie_read(request, currversion)
+#
+#     context = {}
+#     context["game"] = currversion
+#     context["previous_game"] = DLC.objects.filter(game=currversion.game).filter(
+#         create_time__gt=currversion.create_time).last()
+#     context["next_game"] = DLC.objects.filter(game=currversion.game).filter(
+#         create_time__lt=currversion.create_time).first()
+#     # context["comments"] = comments
+#
+#     # 用来初始化CommentForm里面的一些参数
+#     # data = {}
+#     # data["content_type"] = game_content_type.model
+#     # data["object_id"] = game_id
+#     # context["comment_form"] = CommentForm(initial=data)
+#
+#     response = render(request, "dlc_detail.html", context)
+#     response.set_cookie(cookie_key, 'true')
+#
+#     return response
 
 
 def regist_game(request):
@@ -177,12 +176,10 @@ def regist_game(request):
             # 还未在html里加入这个复选框
             introduction = reg_form.cleaned_data['introduction']
             author = Developer.objects.get(user=request.user)
-            price = reg_form.cleaned_data["price"]
             typelist = reg_form.cleaned_data['type']
             avatar = reg_form.cleaned_data['avatar']
-            files = reg_form.cleaned_data["files"]
             game = Game.objects.create(name=name, introduction=introduction, author=author,
-                                       price=price, avatar=avatar, game_type=typelist,files = files)
+                                        avatar=avatar, game_type=typelist)
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("developer home")))
@@ -223,7 +220,7 @@ def add_dlc(request, game_name):
             return redirect("game select")
         else:
 
-            context["form"] = reg_form
+            context["form"] = DLCRegisterForm()
             # context["clear_errors"] = reg_form.errors.get("__all__")
             return render(request, "add_dlc.html", context)
     else:
@@ -241,28 +238,24 @@ def modify_game(request, game_name):
         reg_form = GameRegisterForm(request.POST, request.FILES)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
-            game = Game.objects.filter(name=game_name)
+            game = Game.objects.filter(name=game_name).get()
             game.name = reg_form.cleaned_data["name"]
-            game.game_type.set(reg_form.cleaned_data['type'])
+            game.game_type = (reg_form.cleaned_data['type'])
             game.introduction = request.POST.get('introduction', game.introduction)
             game.author = Developer.objects.get(user=request.user)
-            game.price = reg_form.cleaned_data["price"]
             game.avatar = reg_form.cleaned_data['avatar']
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("home")))
         else:
-            context["game"] = Game.objects.filter(name=game_name)
-            context["form"] = reg_form
-            context["types"] = GameType.objects.filter()
-            # context["clear_errors"] = reg_form.errors.get("__all__")
+            context["game"] = Game.objects.filter(name=game_name).get()
+            context["form"] = GameRegisterForm()
             return render(request, "modify_game.html", context)
     else:
         # 是 get
         reg_form = GameRegisterForm()
         context["game"] = Game.objects.get(name=game_name)
         context["form"] = reg_form
-        context["types"] = GameType.objects.filter()
         return render(request, "modify_game.html", context)
 
 
@@ -377,23 +370,24 @@ def add_branch(request, game_name):
         reg_form = BranchRegisterForm(request.POST, request.FILES)
         # 验证过了，说明用户验证也成功了
         if reg_form.is_valid():
-            name = reg_form.cleaned_data["name"]
-            # 还未在html里加入这个复选框
+            version_num = reg_form.cleaned_data["version_num"]
             introduction = reg_form.cleaned_data["introduction"]
             avatar = reg_form.cleaned_data['avatar']
-            file = reg_form.cleaned_data['file']
-            branch = Version.objects.create(name=name, game=game, introduction=introduction, avatar=avatar,
-                                            file=file)
+            file = reg_form.cleaned_data['files']
+            price = reg_form.cleaned_data["price"]
+            branch = Version.objects.create(version_num = version_num, game=game, introduction=introduction, avatar=avatar,
+                                            file=file,price = price)
             branch.save()
+
             # redirect 去的地址要改
             return redirect("game select")
         else:
 
-            context["form"] = reg_form
+            context["form"] = BranchRegisterForm()
             # context["clear_errors"] = reg_form.errors.get("__all__")
-            return render(request, "add_dlc.html", context)
+            return render(request, "add_branch.html", context)
     else:
         # 是 get
         reg_form = BranchRegisterForm()
         context["form"] = reg_form
-        return render(request, "add_dlc.html", context)
+        return render(request, "add_branch.html", context)
