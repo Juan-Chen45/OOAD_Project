@@ -26,7 +26,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(label="邮箱", widget=forms.EmailInput(attrs={"placeholder": "请输入邮箱"}))
     password = forms.CharField(label="密码", max_length=20, min_length=3, widget=forms.PasswordInput)
     password_again = forms.CharField(label="再次输入密码", max_length=20, min_length=3, widget=forms.PasswordInput)
-    ifDeveloper = bool = forms.BooleanField(required=False)
+    ifDeveloper= forms.BooleanField(required=False)
     # 在clean验证的时候其实可以根据每一个不同的字段进行验证的
     def clean_username(self):
         username = self.cleaned_data["username"]
@@ -46,3 +46,7 @@ class RegisterForm(forms.Form):
         if password != password_again:
             raise forms.ValidationError("密码不一致")
         return password_again
+
+    def clean_ifDeveloper(self):
+        ifDeveloper = self.cleaned_data["ifDeveloper"]
+        return ifDeveloper

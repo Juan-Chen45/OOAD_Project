@@ -28,7 +28,7 @@
                                             type="error">
                                     </el-alert>
                                 </ol>
-                            {% elif error|escape == 'password' or error|escape == 'password_again'%}
+                            {% elif error|escape == 'password_again' %}
                                 <ol>
                                     <el-alert
                                             title=密码不一致
@@ -69,11 +69,9 @@
                                   name="password_again"
                                   show-password></el-input>
                     </el-form-item>
-
-                    <el-form-item>
-                        <el-checkbox v-model="ifDeveloper" name="ifDeveloper">是否注册为Developer</el-checkbox>
-                    </el-form-item>
-
+                    <div>
+                        {{ reg_form.ifDeveloper }} 是否注册为Developer
+                    </div>
                     <el-form-item style="text-align: center">
                         <el-button type="primary" native-type="submit">REGISTERED</el-button>
                         <el-button @click="resetForm('form')">重置</el-button>

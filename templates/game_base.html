@@ -64,23 +64,14 @@
                         {% if user.extenduser %}
                             <a href="{% url "user_home" %}" style="text-decoration:none">
                             <el-menu-item index="4-1">
-{#                                {% if extendUser.avatar.url %}#}
-{#                                    <el-avatar#}
-{#                                            src="extendUser.avatar.url"></el-avatar>#}
-{#                                {% else %}#}
-{#                                    <el-avatar#}
-{#                                            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"></el-avatar>#}
-{#                                {% endif %}#}
                                 View My Profile
                             </el-menu-item>
                         {% endif %}
                         {% if user.developer %}
                             <a href="{% url "developer home" %}" style="text-decoration:none">
-{#                            <el-menu-item index="4-1">#}
-{#                                <el-avatar#}
-{#                                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>#}
-{#                                View My Profile#}
-{#                            </el-menu-item>#}
+                            <el-menu-item index="4-1">
+                                View My Profile
+                            </el-menu-item>
                         {% endif %}
                         </a>
                         <a href="{% url "logout" %}" style="text-decoration:none">
