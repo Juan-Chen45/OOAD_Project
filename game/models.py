@@ -22,7 +22,7 @@ class Game(models.Model, ReadNum_Expand):
     author = models.ForeignKey(Developer, on_delete=models.DO_NOTHING)
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
     lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
-    price = models.FloatField()
+    price = models.FloatField(default=0)
     avatar = models.ImageField(upload_to="game_image/%Y/%m/%d/")
     files = models.FileField(upload_to="game_file/%Y/%m/%d/",null=True)
 

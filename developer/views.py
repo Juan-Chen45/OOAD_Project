@@ -15,14 +15,14 @@ def developer_home(request):
     return render(request, 'developer_home.html', context)
 
 
-# user 看 developer
-def developer_message(request, name):
-    user = User.objects.get(username=name)
-    context = {}
-    context['developer'] = get_object_or_404(Developer, user=request.user)
-    gamelist = Game.objects.filter(author=context['developer'])
-    context['games'] = gamelist
-    return render(request, 'developer_message.html', context)
+# # user 看 developer
+# def developer_message(request, name):
+#     user = User.objects.get(username=name)
+#     context = {}
+#     context['developer'] = get_object_or_404(Developer, user=request.user)
+#     gamelist = Game.objects.filter(author=context['developer'])
+#     context['games'] = gamelist
+#     return render(request, 'developer_message.html', context)
 
 
 # developer 看余额,改除了password的信息
