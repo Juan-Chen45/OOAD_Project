@@ -17,3 +17,6 @@
 ## DONE
 
 + Login界面UI优化（√）
+
+## NEED
++ user_home 传入时把用户持有的游戏按照game_list的格式传入，我按照game_list的格式在用户界面输出。
