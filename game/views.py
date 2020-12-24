@@ -175,7 +175,7 @@ def regist_game(request):
         if reg_form.is_valid():
             name = reg_form.cleaned_data["name"]
             # 还未在html里加入这个复选框
-            introduction = request.POST.get('introduction', '')
+            introduction = reg_form.cleaned_data['introduction']
             author = Developer.objects.get(user=request.user)
             price = reg_form.cleaned_data["price"]
             typelist = reg_form.cleaned_data['type']
@@ -185,7 +185,7 @@ def regist_game(request):
                                        price=price, avatar=avatar, game_type=typelist,files = files)
             game.save()
             # redirect 去的地址要改
-            return redirect(request.GET.get("from", reverse("home")))
+            return redirect(request.GET.get("from", reverse("developer home")))
         else:
 
             context["form"] = reg_form
@@ -196,7 +196,6 @@ def regist_game(request):
         # 是 get
         reg_form = GameRegisterForm()
         context["form"] = reg_form
-        context["types"] = GameType.objects.filter()
         return render(request, "add_game.html", context)
 
 
