@@ -3,8 +3,35 @@
     padding: 0;
 }
 
+
 body {
     margin-top: 70px!important;
 }
 
 
+form {
+    padding: 0 15px 15px 120px;
+    width: 500px;
+    height: 350px;
+}
+
+form label {
+    display: inline-block;
+    width: 110px;
+    height: 20px;
+    /*text-align: right*/
+}
+
+form select {
+    display: inline-block;
+    width: 60px;
+    /*text-align: right*/
+}
+
+label.type {
+    width: 140px;
+}
+
+textarea{
+    height: 30px!important;
+}
