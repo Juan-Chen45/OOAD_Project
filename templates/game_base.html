@@ -61,12 +61,22 @@
                             <i class="el-icon-user-solid"></i>
                             <span slot="title">Account</span>
                         </template>
+                        {% if user.extenduser %}
                         <a href="{% url "user_home" %}" style="text-decoration:none">
                             <el-menu-item index="4-1">
                                 <el-avatar
                                         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
                                 View My Profile
                             </el-menu-item>
+                        {% endif %}
+                        {% if user.developer %}
+                            <a href="{% url "developer home" %}" style="text-decoration:none">
+                            <el-menu-item index="4-1">
+                                <el-avatar
+                                        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                                View My Profile
+                            </el-menu-item>
+                        {% endif %}
                         </a>
                         <a href="{% url "logout" %}" style="text-decoration:none">
                             <el-menu-item index="4-2">

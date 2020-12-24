@@ -19,10 +19,10 @@ def homepage(request):
     user = request.user
     context = {'date': data, 'days': days, 'today_hot_data': today_hot_data, 'games': all_games}
 
-    if(hasattr(user,"developer")):
-        login(request, user)
-    elif(hasattr(user,"extenduser")):
-        login(request, user)
+    # if(hasattr(user,"developer")):
+    #     login(request, user)
+    # elif(hasattr(user,"extenduser")):
+    #     login(request, user)
 
     return render(request, "home.html", context)
 
@@ -55,7 +55,7 @@ def reguser(request):
             email = reg_form.cleaned_data["email"]
             password = reg_form.cleaned_data["password_again"]
             user = User.objects.create_user(username, email, password)
-            extendUser = ExtendUser.objects.create(user=user)
+            extendUser = ExtendUser(user=user)
             user.save()
             extendUser.save()
             login(request, user)

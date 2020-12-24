@@ -14,7 +14,7 @@ class ExtendUser(models.Model):
     game = models.ManyToManyField(Game, blank=True)
     dlc = models.ManyToManyField(DLC, blank=True)
     avatar = RichTextUploadingField()
-    account = models.FloatField()
+    account = models.FloatField(default=0)
 
 
     def get_content_img_url(self):
