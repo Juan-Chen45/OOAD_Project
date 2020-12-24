@@ -11,61 +11,72 @@
 {% endblock %}
 
 {% block content %}
-    <el-main>
+{#    <el-main>#}
+{##}
+{#        <el-col :span="9" style="margin-left: 20%">#}
+{#            <el-form ref="form" :model="userForm" label-width="80px" size="mini">#}
+{#                <el-form-item label="用户名">#}
+{#                    <el-input v-model="userForm.name"></el-input>#}
+{#                </el-form-item>#}
+{##}
+{#                <el-form-item label="生日">#}
+{#                    <el-col :span="11">#}
+{#                        <el-date-picker type="date" placeholder="选择日期" v-model="userForm.date1"#}
+{#                                        style="width: 100%;"></el-date-picker>#}
+{#                    </el-col>#}
+{#                </el-form-item>#}
+{#                <el-form-item label="爱好">#}
+{#                    <el-checkbox :indeterminate="userForm.isIndeterminate" v-model="userForm.checkAll" @change="handleCheckAllChange">全选#}
+{#                    </el-checkbox>#}
+{#                    <div style="margin: 15px 0;"></div>#}
+{#                    <el-checkbox-group v-model="userForm.checkedCities"#}
+{#                                       name="checkedCities"#}
+{#                                       @change="handleCheckedCitiesChange">#}
+{#                        <el-checkbox v-for="city in userForm.cities" :label="city" :key="city">{{ city }}</el-checkbox>#}
+{#                    </el-checkbox-group>#}
+{#                </el-form-item>#}
+{#                <el-form-item label="用户简介">#}
+{#                    <el-input v-model="userForm.introduction" autocomplete="off"#}
+{#                              name="introduction"#}
+{#                              type="textarea"#}
+{#                              placeholder="User Name"#}
+{#                              maxlength="30"#}
+{#                              show-word-limit#}
+{#                    ></el-input>#}
+{#                </el-form-item>#}
+{#                <el-form-item size="large">#}
+{#                    <el-button type="primary" @click="onSubmit">立即创建</el-button>#}
+{#                    <el-button>取消</el-button>#}
+{#                </el-form-item>#}
+{#            </el-form>#}
+{#        </el-col>#}
+{#        <form action="" method="post" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            {% for field in form %}#}
+{#                <div class="fieldWrapper">#}
+{#                    {{ field.errors }}#}
+{#                    {{ field.label }} {{ field }}#}
+{#                </div>#}
+{##}
+{#            {% endfor %}#}
+{#            <div class="form-group">#}
+{#                <label for="introduction">用户简介:</label>#}
+{#                <textarea class="form-control" rows="3"></textarea>#}
+{#            </div>#}
+{#            <button type="submit" value="Submit">上传</button>#}
+{#        </form>#}
+{#    </el-main>#}
 
-        <el-col :span="9" style="margin-left: 20%">
-            <el-form ref="form" :model="userForm" label-width="80px" size="mini">
-                <el-form-item label="用户名">
-                    <el-input v-model="userForm.name"></el-input>
-                </el-form-item>
+       {% if  user.is_authenticated %}
+        <form action="" method="POST" enctype="multipart/form-data">
+       {% csrf_token %}
+       {{ form }}
+       <input type="submit" value="提交">
+   </form>
+    {% else %}
+        <h3>您未登录</h3>
+    {% endif %}
 
-                <el-form-item label="生日">
-                    <el-col :span="11">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="userForm.date1"
-                                        style="width: 100%;"></el-date-picker>
-                    </el-col>
-                </el-form-item>
-                <el-form-item label="爱好">
-                    <el-checkbox :indeterminate="userForm.isIndeterminate" v-model="userForm.checkAll" @change="handleCheckAllChange">全选
-                    </el-checkbox>
-                    <div style="margin: 15px 0;"></div>
-                    <el-checkbox-group v-model="userForm.checkedCities"
-                                       name="checkedCities"
-                                       @change="handleCheckedCitiesChange">
-                        <el-checkbox v-for="city in userForm.cities" :label="city" :key="city">{{ city }}</el-checkbox>
-                    </el-checkbox-group>
-                </el-form-item>
-                <el-form-item label="用户简介">
-                    <el-input v-model="userForm.introduction" autocomplete="off"
-                              name="introduction"
-                              type="textarea"
-                              placeholder="User Name"
-                              maxlength="30"
-                              show-word-limit
-                    ></el-input>
-                </el-form-item>
-                <el-form-item size="large">
-                    <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                    <el-button>取消</el-button>
-                </el-form-item>
-            </el-form>
-        </el-col>
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="fieldWrapper">
-                    {{ field.errors }}
-                    {{ field.label }} {{ field }}
-                </div>
-
-            {% endfor %}
-            <div class="form-group">
-                <label for="introduction">用户简介:</label>
-                <textarea class="form-control" rows="3"></textarea>
-            </div>
-            <button type="submit" value="Submit">上传</button>
-        </form>
-    </el-main>
 {% endblock %}
 
 <script>

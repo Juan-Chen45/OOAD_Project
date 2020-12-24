@@ -14,7 +14,7 @@
                     {% csrf_token %}
                     {% if reg_form.non_field_errors %}
                         <ol>
-                            {% for error in reg_form.ValidationError %}
+                            {% for error in reg_form.non_field_errors %}
                                 <el-alert
                                         title={{ error|escape }}
                                                 type="error">
@@ -52,6 +52,7 @@
                                   name="password_again"
                                   show-password></el-input>
                     </el-form-item>
+
                     <el-form-item style="text-align: center">
                         <el-button type="primary" native-type="submit">REGISTERED</el-button>
                         <el-button @click="resetForm('form')">重置</el-button>

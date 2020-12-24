@@ -13,7 +13,8 @@ class ExtendUser(models.Model):
     friend = models.ManyToManyField('self', blank=True)
     game = models.ManyToManyField(Game, blank=True)
     dlc = models.ManyToManyField(DLC, blank=True)
-    avatar = RichTextUploadingField()
+    # 此处修改为ImageField类型
+    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/",default='upload/2020/12/21/sketchpad.png')
     account = models.FloatField(default=0)
 
 

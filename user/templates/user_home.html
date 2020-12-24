@@ -10,6 +10,7 @@ User Info
 {% endblock %}
 
 {% block content %}
+    <img src="{{ extendUser.avatar.url }}" alt="">
     <el-main>
         <div>
             {% if user.is_authenticated %}
