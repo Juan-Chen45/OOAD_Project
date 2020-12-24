@@ -46,8 +46,8 @@ def game_detail(request, game_id):
     context["game"] = currgame
     context["previous_game"] = Game.objects.filter(create_time__gt=currgame.create_time).last()
     context["next_game"] = Game.objects.filter(create_time__lt=currgame.create_time).first()
-    context["dlcs"] = DLC.objects.filter(game=currgame)
-    context["versions"] = Version.objects.filter(game=currgame)
+    # context["dlcs"] = DLC.objects.filter(game=currgame)
+    # context["versions"] = Version.objects.filter(game=currgame)
     context["comments"] = comments
 
     # 用来初始化CommentForm里面的一些参数
@@ -55,7 +55,8 @@ def game_detail(request, game_id):
     data["content_type"] = game_content_type.model
     data["object_id"] = game_id
     context["comment_form"] = CommentForm(initial=data)
-
+    context['versions'] = currgame.game_version.all()
+    context['dlcs'] = currgame.dlc_version.all()
     response = render(request, "game_detail.html", context)
     response.set_cookie(cookie_key, 'true')
 
@@ -103,65 +104,25 @@ def get_game_common(request, all_games):
     context["game_date"] = Game.objects.dates("create_time", "month", order="DESC")
     return context
 
+# version 的介绍页面
+def version_detail(request, game_name,version_id):
+    currversion = get_object_or_404(Version, pk=version_id)
+    context = {}
+    context["version"] = currversion
+    response = render(request, "version_detail.html", context)
 
-# # version 的介绍页面
-# def version_detail(request, version_id):
-#     currversion = get_object_or_404(Version, pk=version_id)
-#
-#     # 获得这个game对应的comment
-#
-#     # game_content_type = ContentType.objects.get_for_model(currgame)
-#     # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
-#     cookie_key = cookie_read(request, currversion)
-#
-#     context = {}
-#     context["game"] = currversion
-#     context["previous_game"] = Version.objects.filter(game=currversion.game).filter(
-#         create_time__gt=currversion.create_time).last()
-#     context["next_game"] = Version.objects.filter(game=currversion.game).filter(
-#         create_time__lt=currversion.create_time).first()
-#     # context["comments"] = comments
-#
-#     # 用来初始化CommentForm里面的一些参数
-#     # data = {}
-#     # data["content_type"] = game_content_type.model
-#     # data["object_id"] = game_id
-#     # context["comment_form"] = CommentForm(initial=data)
-#
-#     response = render(request, "version_detail.html", context)
-#     response.set_cookie(cookie_key, 'true')
-#
-#     return response
-#
-#
-# # dlc的介绍页面
-# def dlc_detail(request, dlc_id):
-#     currversion = get_object_or_404(DLC, pk=dlc_id)
-#
-#     # 获得这个game对应的comment
-#
-#     # game_content_type = ContentType.objects.get_for_model(currgame)
-#     # comments = Comment.objects.filter(content_type=game_content_type, object_id=game_id)
-#     cookie_key = cookie_read(request, currversion)
-#
-#     context = {}
-#     context["game"] = currversion
-#     context["previous_game"] = DLC.objects.filter(game=currversion.game).filter(
-#         create_time__gt=currversion.create_time).last()
-#     context["next_game"] = DLC.objects.filter(game=currversion.game).filter(
-#         create_time__lt=currversion.create_time).first()
-#     # context["comments"] = comments
-#
-#     # 用来初始化CommentForm里面的一些参数
-#     # data = {}
-#     # data["content_type"] = game_content_type.model
-#     # data["object_id"] = game_id
-#     # context["comment_form"] = CommentForm(initial=data)
-#
-#     response = render(request, "dlc_detail.html", context)
-#     response.set_cookie(cookie_key, 'true')
-#
-#     return response
+    return response
+
+
+# dlc的介绍页面
+def dlc_detail(request, game_name,dlc_id):
+    currversion = get_object_or_404(DLC, pk=dlc_id)
+    context = {}
+    context["game"] = currversion
+    response = render(request, "dlc_detail.html", context)
+    return response
+
+
 
 
 def regist_game(request):

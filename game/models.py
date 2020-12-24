@@ -23,6 +23,7 @@ class Game(models.Model, ReadNum_Expand):
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
     lastupdate_time = models.DateTimeField(auto_now=True)  # 修改时自动改时间
     avatar = models.ImageField(upload_to="game_image/%Y/%m/%d/")
+
     # price = models.FloatField(default=0)
     # files = models.FileField(upload_to="game_file/%Y/%m/%d/",null=True)
     # versions = []
@@ -69,29 +70,32 @@ class Version(models.Model):
     introduction = models.TextField(default="")
     price = models.FloatField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
-    game = models.ForeignKey(Game,related_name="game_version",on_delete=models.DO_NOTHING)
+    game = models.ForeignKey(Game, related_name="game_version", on_delete=models.DO_NOTHING)
     avatar = models.ImageField(upload_to="version_image/%Y/%m/%d/")
-    file = models.FileField(upload_to="game_file/%Y/%m/%d/",null=True)
+    file = models.FileField(upload_to="game_file/%Y/%m/%d/", null=True)
 
     def __str__(self):
         return self.game.name + str(self.version_num)
+
     class Meta:
         ordering = ["-create_time", ]
+
 
 class DLC(models.Model):
     name = models.CharField(max_length=50)
     introduction = models.TextField(default="")
     price = models.FloatField(default=0)
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时自动搞时间
-    game = models.ForeignKey(Game,related_name="dlc_version",on_delete=models.DO_NOTHING)
+    game = models.ForeignKey(Game, related_name="dlc_version", on_delete=models.DO_NOTHING)
     avatar = models.ImageField(upload_to="dlc_image/%Y/%m/%d/")
-    file = models.FileField(upload_to="dlc_file/%Y/%m/%d/",null=True)
+    file = models.FileField(upload_to="dlc_file/%Y/%m/%d/", null=True)
 
     class Meta:
         ordering = ["-create_time", ]
 
     def __str__(self):
         return self.name
+
 
 class Discount(models.Model):
     # 加入唯一约束
