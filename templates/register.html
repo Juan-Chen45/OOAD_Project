@@ -12,15 +12,32 @@
             <el-col :span="9" style="margin-left: 20%">
                 <el-form :model="form" :rules="rules" action="" ref="form" status-icon method="POST" size="medium">
                     {% csrf_token %}
-                    {% if reg_form.non_field_errors %}
-                        <ol>
-                            {% for error in reg_form.non_field_errors %}
-                                <el-alert
-                                        title={{ error|escape }}
-                                                type="error">
-                                </el-alert>
-                            {% endfor %}
-                        </ol>
+                    {% if reg_form.errors %}
+                        {% for error in reg_form.errors %}
+                            {% if error|escape == 'username' %}
+                                <ol>
+                                    <el-alert
+                                            title=用户名已存在
+                                            type="error">
+                                    </el-alert>
+                                </ol>
+                            {% elif error|escape == 'email' %}
+                                <ol>
+                                    <el-alert
+                                            title=邮箱已存在
+                                            type="error">
+                                    </el-alert>
+                                </ol>
+                            {% elif error|escape == 'password' or error|escape == 'password_again'%}
+                                <ol>
+                                    <el-alert
+                                            title=密码不一致
+                                            type="error">
+                                    </el-alert>
+                                </ol>
+                            {% endif %}
+
+                        {% endfor %}
                     {% endif %}
                     <el-form-item prop="username">
                         <el-input v-model="form.username" autocomplete="off"
@@ -51,6 +68,10 @@
                                   placeholder="Enter Your password again"
                                   name="password_again"
                                   show-password></el-input>
+                    </el-form-item>
+
+                    <el-form-item>
+                        <el-checkbox v-model="ifDeveloper" name="ifDeveloper">是否注册为Developer</el-checkbox>
                     </el-form-item>
 
                     <el-form-item style="text-align: center">

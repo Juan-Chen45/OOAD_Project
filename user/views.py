@@ -13,36 +13,6 @@ from myfirstsite.views import user_login
 # Create your views here.
 
 
-def writeFile(filePath, file):
-    with open(filePath, "wb") as f:
-        if file.multiple_chunks():
-            for content in file.chunks():
-                f.write(content)
-        else:
-            data = file.read().decode('utf-8')
-            f.write(data)
-
-
-def uploadFile(request):
-    if request.method == "POST":
-        fileDict = request.FILES.items()
-        # 获取上传的文件，如果没有文件，则默认为None
-        if not fileDict:
-            return JsonResponse({'msg': 'no file upload'})
-        for (k, v) in fileDict:
-            print("dic[%s]=%s" % (k, v))
-            fileData = request.FILES.getlist(k)
-            for file in fileData:
-                fileName = file._get_name()
-                filePath = os.path.join(settings.TEMP_FILE_PATH, fileName)
-                print('filepath = [%s]' % filePath)
-                try:
-                    writeFile(filePath, file)
-                except:
-                    return JsonResponse({'msg': 'file write failed'})
-        return JsonResponse({'msg': 'success'})
-
-
 def user_home(request):
     context = {}
     context['user'] = request.user
@@ -62,6 +32,7 @@ def modify_user(request):
     if request.method == "POST":
         # 当有数据上传时，要把request.FILES传入
         # 同时前端要加enctype="multipart/form-data"
+
         modify_form = UserModifyForm(request.POST,request.FILES)
         # 验证过了，说明用户验证也成功了
         if modify_form.is_valid():
@@ -75,7 +46,8 @@ def modify_user(request):
             return redirect(reverse("user_home"))
     else:
         # 是 get
-        modify_form = UserModifyForm()
+        initial = {"name": user.username, "introduction": extend.introduction,"avatar":extend.avatar}
+        modify_form = UserModifyForm(initial=initial)
     context["user"] = user
     context["extend"] = extend
     context["form"] = modify_form

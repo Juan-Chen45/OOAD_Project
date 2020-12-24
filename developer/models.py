@@ -24,10 +24,11 @@ class DocumentationHelp(models.Model):
 
 class Developer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    account = models.FloatField()
+    account = models.FloatField(default=0)
     introduction = models.CharField(max_length=300)
     create_date = models.DateTimeField(auto_now_add=True)
-    avatar = RichTextUploadingField()
+    avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/",default='upload/2020/12/21/sketchpad.png')
+
 
     def get_content_img_url(self):
         temp = Developer.objects.filter(pk=str(self.id)).values('avatar')  # values 获取 Article 数据表中的 content 字段内容

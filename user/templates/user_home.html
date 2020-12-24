@@ -1,6 +1,6 @@
 {% extends 'game_base.html' %}
 {% block title %}
-User Info
+    User Info
 {% endblock %}
 {% block link_extends %}
     {% load static %}
@@ -10,32 +10,37 @@ User Info
 {% endblock %}
 
 {% block content %}
-    <img src="{{ extendUser.avatar.url }}" alt="">
-    <el-main>
+    <el-main style="padding: 0">
         <div>
             {% if user.is_authenticated %}
-                <div id="profile">
-{#                    <div>#}
-                        <h1 style="text-align: center">设置头像</h1>
-                        <div style="text-align: center">
-                            <el-upload
-                                    class="avatar-uploader"
-                                    action="https://jsonplaceholder.typicode.com/posts/"
-                                    :show-file-list="false"
-                                    :on-success="handleAvatarSuccess"
-                                    :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                            </el-upload>
-                        </div>
-{#                    </div>#}
-                </div>
-                {##}
-                {#                <img src="{{ user.get_content_img_url }}">#}
-                {#                <h3>user name:{{ user.username }}</h3>#}
-                {#                <h3>avatar: {{ user.avatar|safe }}</h3>#}
-                {#                <h3>user introduction:{{ extendUser.introduction }}</h3>#}
+                <el-menu
+                        :default-active="activeIndex2"
+                        class="el-menu-demo"
+                        mode="horizontal"
+                        @select="handleSelect"
+                        background-color="#545c64"
+                        text-color="#fff"
+                        active-text-color="#ffd04b"
+                        style="overflow-y: hidden">
+                    <el-submenu index="2" style="margin-left: 90%">
+                        <template slot="title">
+                            <div style="overflow-y: hidden;margin-right: 0">
 
+                                <el-avatar :size="large" style="
+                                        background-image: url({{ extendUser.avatar.url }});
+                                        background-repeat: no-repeat;
+                                        background-position:center center;
+                                        border-color: #EDF1F2;
+                                        background-size: cover;"></el-avatar>
+                            </div>
+                        </template>
+                        <el-menu-item index="2-1" @click="jumpTo">设置信息</el-menu-item>
+                    </el-submenu>
+                </el-menu>
+                <div id="profile">
+
+                </div>
+                {{ extendUser.introduction }}
             {% else %}
                 未登录
                 <a href="{% url "user_login" %}?from={{ request.get_full_path }}">登录</a>
@@ -48,4 +53,12 @@ User Info
         </div>
     </el-main>
 
+{% endblock %}
+
+
+
+{% block Method %}
+    jumpTo(){
+    window.location.href = '{% url "modify_user" %}';
+    },
 {% endblock %}

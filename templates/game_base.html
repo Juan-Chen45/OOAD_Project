@@ -59,7 +59,7 @@
                     <el-submenu index="4">
                         <template slot="title">
                             <i class="el-icon-user-solid"></i>
-                            <span slot="title">Account</span>
+                            <span slot="title">{{ user.username }}</span>
                         </template>
                         {% if user.extenduser %}
                         <a href="{% url "user_home" %}" style="text-decoration:none">
@@ -169,6 +169,7 @@
                 this.checkAll = checkedCount === this.cities.length;
                 this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
             },
+
         },
     };
     const Ctor = Vue.extend(Main);
