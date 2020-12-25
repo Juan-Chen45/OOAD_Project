@@ -5,11 +5,14 @@
     <title>Title</title>
 </head>
 <body>
-<el-row>
-    <div style="width: 450px;height: 400px ;">
-        <embed src="{{ game.files.url }}" width="450px" height="400px" play="true" loop="false" quality="high"
-                   type="application/x-shockwave-flash">
-    </div>
-</el-row>
+<div style="width: 450px;height: 400px ;">
+    <el-card shadow="never" style="width: 100%;height: 100%;"
+             body-style="padding: 0;height: 100%!important;">
+        <embed src="/media/game_file/2020/12/25/1.swf"
+               width="100%" height="100%"
+               play="true" loop="false" quality="high"
+               type="application/x-shockwave-flash">
+    </el-card>
+</div>
 </body>
 </html>

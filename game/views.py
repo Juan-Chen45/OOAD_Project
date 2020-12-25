@@ -104,32 +104,31 @@ def get_game_common(request, all_games):
     context["game_date"] = Game.objects.dates("create_time", "month", order="DESC")
     return context
 
+
 # version 的介绍页面
-def version_detail(request, game_name,version_id):
+def version_detail(request, game_name, version_id):
     currversion = get_object_or_404(Version, pk=version_id)
     context = {}
     context["version"] = currversion
     context["purchased"] = False
     extend = request.user.extenduser
-    if extend.version.filter(pk = version_id).exists():
+    if extend.version.filter(pk=version_id).exists():
         context["purchased"] = True
     response = render(request, "version_detail.html", context)
     return response
 
 
 # dlc的介绍页面
-def dlc_detail(request, game_name,dlc_id):
+def dlc_detail(request, game_name, dlc_id):
     currversion = get_object_or_404(DLC, pk=dlc_id)
     context = {}
     context["game"] = currversion
     context["purchased"] = False
     extend = request.user.extenduser
-    if extend.dlc.filter(pk = dlc_id).exists():
+    if extend.dlc.filter(pk=dlc_id).exists():
         context["purchased"] = True
     response = render(request, "dlc_detail.html", context)
     return response
-
-
 
 
 def regist_game(request):
@@ -147,7 +146,7 @@ def regist_game(request):
             typelist = reg_form.cleaned_data['type']
             avatar = reg_form.cleaned_data['avatar']
             game = Game.objects.create(name=name, introduction=introduction, author=author,
-                                        avatar=avatar, game_type=typelist)
+                                       avatar=avatar, game_type=typelist)
             game.save()
             # redirect 去的地址要改
             return redirect(request.GET.get("from", reverse("developer home")))
@@ -269,33 +268,33 @@ def set_discount(request, game_name):
 # 加入搜索功能
 
 # 加入购买功能(考虑给user加入余额属性?)
-def purchase_game(request,game_name,version_id):
+def purchase_game(request, game_name, version_id):
     referer = request.META.get("HTTP_REFERER", reverse("home"))
-    if request.method == 'POST':
-        context = {}
-        context.update(csrf(request))
-        currversion = Version.objects.get(pk = version_id)
-        extend = get_object_or_404(ExtendUser, user=request.user)
-        # 买了
-        # 判断是否购买成功
-        success = extend.account > currversion.price
-        if success:
-            # extend.account = extend.account - currversion.price
-            ExtendUser.objects.filter(id = extend.id).update(account = extend.account - currversion.price)
-            developer = currversion.game.author
-            # developer.account += currversion.price
-            Developer.objects.filter(id=developer.id).update(account = developer.account+currversion.price)
-            developer.save()
-            # game_list = [context]
-            # for g in extend.version.all():
-            #     game_list.append(g)
-            # extend.version.set(game_list)
-            extend.version.add(currversion)
-            extend.save()
-    redirect(referer)
+    # if request.method == 'POST':
+    context = {}
+    context.update(csrf(request))
+    currversion = Version.objects.get(pk=version_id)
+    extend = get_object_or_404(ExtendUser, user=request.user)
+    # 买了
+    # 判断是否购买成功
+    success = extend.account > currversion.price
+    if success:
+        extend.account = extend.account - currversion.price
+        # ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currversion.price)
+        developer = currversion.game.author
+        developer.account += currversion.price
+        # Developer.objects.filter(id=developer.id).update(account=developer.account + currversion.price)
+        developer.save()
+        # game_list = [context]
+        # for g in extend.version.all():
+        #     game_list.append(g)
+        # extend.version.set(game_list)
+        extend.version.add(currversion)
+        extend.save()
+    return redirect(referer)
 
 
-def purchase_dlc(request, dlc_name,dlc_id):
+def purchase_dlc(request, dlc_name, dlc_id):
     # context = {}
     # context.update(csrf(request))
     # dlc = DLC.objects.get(name=dlc_name)
@@ -325,17 +324,17 @@ def purchase_dlc(request, dlc_name,dlc_id):
     if request.method == 'POST':
         context = {}
         context.update(csrf(request))
-        currdlc = DLC.objects.get(pk = dlc_id)
+        currdlc = DLC.objects.get(pk=dlc_id)
         extend = get_object_or_404(ExtendUser, user=request.user)
         # 买了
         # 判断是否购买成功
         success = extend.account > currdlc.price
         if success:
             # extend.account = extend.account - currversion.price
-            ExtendUser.objects.filter(id = extend.id).update(account = extend.account - currdlc.price)
+            ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currdlc.price)
             developer = currdlc.game.author
             # developer.account += currversion.price
-            Developer.objects.filter(id=developer.id).update(account = developer.account+currdlc.price)
+            Developer.objects.filter(id=developer.id).update(account=developer.account + currdlc.price)
             developer.save()
             # game_list = [context]
             # for g in extend.version.all():
@@ -343,7 +342,7 @@ def purchase_dlc(request, dlc_name,dlc_id):
             # extend.version.set(game_list)
             extend.dlc.add(currdlc)
             extend.save()
-    redirect(referer)
+    return redirect(referer)
 
 
 def add_branch(request, game_name):
@@ -362,8 +361,9 @@ def add_branch(request, game_name):
             avatar = reg_form.cleaned_data['avatar']
             file = reg_form.cleaned_data['files']
             price = reg_form.cleaned_data["price"]
-            branch = Version.objects.create(version_num = version_num, game=game, introduction=introduction, avatar=avatar,
-                                            file=file,price = price)
+            branch = Version.objects.create(version_num=version_num, game=game, introduction=introduction,
+                                            avatar=avatar,
+                                            file=file, price=price)
             branch.save()
 
             # redirect 去的地址要改

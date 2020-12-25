@@ -63,22 +63,46 @@
              style="height: 500px;width: 500px;
                     top: 130px;
                      left: 0;
-                     margin-left: 0;
+                     align-content: center;
                      bottom: 0">
-{#            {% if purchaced %}#}
+            {% if purchased %}
+                <el-button type="info" round @click="centerDialogVisible = true">开始游戏</el-button>
+                <el-dialog
+                        title="在线游玩"
+                        :visible.sync="centerDialogVisible"
+                        width="750px"
+                        :close-on-click-modal="false"
+                        center>
+                    <embed src="{{ version.file.url }}" width="700px" height="400px" play="true" loop="false"
+                           quality="high"
+                           type="application/x-shockwave-flash">
+                    <span slot="footer" class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取 消</el-button>
+                </span>
+                </el-dialog>
+
+            {% else %}
                 <div>
                     <center>
-                        <el-button type="text" @click="open">开始游戏</el-button>
+                        {{ version.game.name }}
+                        {{ version.id }}
+
+                        <a style="text-decoration: none"
+                           href="{% url "purchase game" version.game.name version.id %}">
+                            <el-button type="info" round @click="byGame">购买游戏</el-button>
+                        </a>
+
                     </center>
                 </div>
-{#            {% else %}#}
-{#                <div>#}
-{#                    <center>#}
-{#                        <el-button type="text" @click="open">购买游戏</el-button>#}
-{#                    </center>#}
-{#                </div>#}
-{#            {% endif %}#}
+            {% endif %}
         </div>
     </div>
 
+{% endblock %}
+
+{% block Method %}
+
+    byGame(){
+    window.location.href = '{% url "purchase game" version.game.name version.id %}';
+    },
 {% endblock %}
