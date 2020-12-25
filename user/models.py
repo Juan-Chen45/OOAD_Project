@@ -2,7 +2,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.contrib.auth.models import User
 from pyquery import PyQuery as pq
-from game.models import Game, DLC
+from game.models import Game, DLC,Version
 
 
 # Create your models here.
@@ -11,7 +11,7 @@ class ExtendUser(models.Model):
     introduction = models.CharField(max_length=300, default="大家好！萌新一个！", blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     friend = models.ManyToManyField('self', blank=True)
-    game = models.ManyToManyField(Game, blank=True)
+    version = models.ManyToManyField(Version, blank=True)
     dlc = models.ManyToManyField(DLC, blank=True)
     # 此处修改为ImageField类型
     avatar = models.ImageField(upload_to="avatar/%Y/%m/%d/", default='avatar/defaultAv.png')

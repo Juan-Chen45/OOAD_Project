@@ -28,14 +28,14 @@ def game_detail(request, game_id):
     user = request.user
     context = {}
     # 此处樊顺需要注意，没有登录的用户浏览的时候是看不到purchase的
-    if(not isinstance(user,AnonymousUser)):
-        extend = get_object_or_404(ExtendUser, user=user)
-        purchased = False
-        for game in extend.game.all():
-            if game.pk == game_id:
-                purchased = True
-                break
-        context["purchased"] = purchased
+    # if(not isinstance(user,AnonymousUser)):
+    #     extend = get_object_or_404(ExtendUser, user=user)
+    #     purchased = False
+    #     for game in extend.version.all():
+    #         if game.pk == game_id:
+    #             purchased = True
+    #             break
+    #     context["purchased"] = purchased
 
     # 获得这个game对应的comment
 
@@ -109,8 +109,11 @@ def version_detail(request, game_name,version_id):
     currversion = get_object_or_404(Version, pk=version_id)
     context = {}
     context["version"] = currversion
+    context["purchased"] = False
+    extend = request.user.extenduser
+    if extend.version.filter(pk = version_id).exists():
+        context["purchased"] = True
     response = render(request, "version_detail.html", context)
-
     return response
 
 
@@ -119,6 +122,10 @@ def dlc_detail(request, game_name,dlc_id):
     currversion = get_object_or_404(DLC, pk=dlc_id)
     context = {}
     context["game"] = currversion
+    context["purchased"] = False
+    extend = request.user.extenduser
+    if extend.dlc.filter(pk = dlc_id).exists():
+        context["purchased"] = True
     response = render(request, "dlc_detail.html", context)
     return response
 
@@ -262,62 +269,81 @@ def set_discount(request, game_name):
 # 加入搜索功能
 
 # 加入购买功能(考虑给user加入余额属性?)
-def purchase_game(request, game_name):
-    context = {}
-    context.update(csrf(request))
-    game = Game.objects.get(name=game_name)
-    context['game'] = game
-    context['version'] = Version.objects.filter(game=game)
-    context['user'] = request.user
-    extend = get_object_or_404(ExtendUser, user=context['user'])
-    context['extend'] = extend
+def purchase_game(request,game_name,version_id):
+    referer = request.META.get("HTTP_REFERER", reverse("home"))
     if request.method == 'POST':
+        context = {}
+        context.update(csrf(request))
+        currversion = Version.objects.get(pk = version_id)
+        extend = get_object_or_404(ExtendUser, user=request.user)
         # 买了
         # 判断是否购买成功
-        success = extend.account > game.price
+        success = extend.account > currversion.price
         if success:
-            extend.account = extend.account - game.price
-            developer = game.author
-            developer.account += game.price
+            # extend.account = extend.account - currversion.price
+            ExtendUser.objects.filter(id = extend.id).update(account = extend.account - currversion.price)
+            developer = currversion.game.author
+            # developer.account += currversion.price
+            Developer.objects.filter(id=developer.id).update(account = developer.account+currversion.price)
             developer.save()
-            game_list = [game]
-            for g in extend.game.all():
-                game_list.append(g)
-            extend.game.set(game_list)
+            # game_list = [context]
+            # for g in extend.version.all():
+            #     game_list.append(g)
+            # extend.version.set(game_list)
+            extend.version.add(currversion)
             extend.save()
-            return redirect("game_detail", game.pk)
-        else:
-            return redirect("purchase fail")
-    else:
-        return render(request, 'purchase.html', context)
+    redirect(referer)
 
 
-def purchase_dlc(request, dlc_name):
-    context = {}
-    context.update(csrf(request))
-    dlc = DLC.objects.get(name=dlc_name)
-    context['dlc'] = dlc
-    context['user'] = request.user
-    extend = get_object_or_404(ExtendUser, user=context['user'])
+def purchase_dlc(request, dlc_name,dlc_id):
+    # context = {}
+    # context.update(csrf(request))
+    # dlc = DLC.objects.get(name=dlc_name)
+    # context['dlc'] = dlc
+    # context['user'] = request.user
+    # extend = get_object_or_404(ExtendUser, user=context['user'])
+    # if request.method == 'POST':
+    #     # 买了
+    #     # 判断是否购买成功
+    #     success = extend.account > dlc.price
+    #     if success:
+    #         extend.account = extend.account - dlc.price
+    #         developer = dlc.author
+    #         developer.account += dlc.price
+    #         developer.save()
+    #         dlc_list = [dlc]
+    #         for g in extend.dlc.all():
+    #             dlc_list.append(g)
+    #         extend.game.set(game_list)
+    #         extend.save()
+    #         return redirect("dlc_detail", dlc.pk)
+    #     else:
+    #         return redirect("purchase fail")
+    # else:
+    #     return render(request, 'purchase_dlc.html', context)
+    referer = request.META.get("HTTP_REFERER", reverse("home"))
     if request.method == 'POST':
+        context = {}
+        context.update(csrf(request))
+        currdlc = DLC.objects.get(pk = dlc_id)
+        extend = get_object_or_404(ExtendUser, user=request.user)
         # 买了
         # 判断是否购买成功
-        success = extend.account > dlc.price
+        success = extend.account > currdlc.price
         if success:
-            extend.account = extend.account - dlc.price
-            developer = dlc.author
-            developer.account += dlc.price
+            # extend.account = extend.account - currversion.price
+            ExtendUser.objects.filter(id = extend.id).update(account = extend.account - currdlc.price)
+            developer = currdlc.game.author
+            # developer.account += currversion.price
+            Developer.objects.filter(id=developer.id).update(account = developer.account+currdlc.price)
             developer.save()
-            dlc_list = [dlc]
-            for g in extend.dlc.all():
-                dlc_list.append(g)
-            extend.game.set(game_list)
+            # game_list = [context]
+            # for g in extend.version.all():
+            #     game_list.append(g)
+            # extend.version.set(game_list)
+            extend.dlc.add(currdlc)
             extend.save()
-            return redirect("dlc_detail", dlc.pk)
-        else:
-            return redirect("purchase fail")
-    else:
-        return render(request, 'purchase_dlc.html', context)
+    redirect(referer)
 
 
 def add_branch(request, game_name):

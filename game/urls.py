@@ -12,8 +12,8 @@ urlpatterns = [
     path("<str:game_name>/add_dlc", add_dlc, name="add dlc"),
     path("<str:game_name>/add_branch", add_branch, name="add branch"),
 
-    path("<str:game_name>/purchase", purchase_game, name="purchase game"),
-    path("<str:dlc_name>/purchase_dlc",purchase_dlc,name="purchase dlc"),
+    path("<str:game_name>/<int:version_id>/purchase", purchase_game, name="purchase game"),
+    path("<str:dlc_name>/<int:dlc_id>/purchase_dlc",purchase_dlc,name="purchase dlc"),
     path("<str:game_name>/discount", set_discount, name="set_discount"),
     path("<str:game_name>/<int:version_id>", version_detail, name="version_detail"),
     path("<str:game_name>/<int:dlc_id>", dlc_detail, name="dlc_detail"),
