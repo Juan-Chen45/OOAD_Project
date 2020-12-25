@@ -283,7 +283,6 @@ def set_discount(request, game_name):
             context["form"] = form
     else:
         form = DiscountRegisterForm()
-        form.set_fields(dlcs)
         context["form"] = form
     return render(request, "set_discount.html", context)
 

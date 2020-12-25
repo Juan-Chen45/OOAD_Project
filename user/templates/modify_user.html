@@ -11,71 +11,27 @@
 {% endblock %}
 
 {% block content %}
-
     {% if  user.is_authenticated %}
-
-
-
-
-        <el-main>
-            <el-col :span="9" style="margin-left: 20%">
-                <el-form ref="form" :model="userForm" label-width="80px" size="mini" enctype="multipart/form-data">
-                    <el-form-item label="用户名">
-                        <el-input v-model="userForm.name" name="用户名"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="用户简介">
-                        <el-input v-model="userForm.introduction" autocomplete="off"
-                                  name="个人简介"
-                                  type="textarea"
-                                  placeholder="User Name"
-                                  maxlength="30"
-                                  show-word-limit
-                        ></el-input>
-                    </el-form-item>
-                    <el-form-item size="large">
-                        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-                        <el-button>取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-            <form action="" method="post" enctype="multipart/form-data">
+        <div style="margin: 20%">
+            <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                {% for field in form %}
-                    <div class="fieldWrapper">
-                        {{ field.errors }}
-                        {{ field.label }} {{ field }}
-                    </div>
-
-                {% endfor %}
-                <div class="form-group">
-                    <label for="introduction">用户简介:</label>
-                    <textarea class="form-control" rows="3"></textarea>
+                <div class="fieldWrapper">
+                    <label>用户名:</label>
+                    {{ form.name }}
                 </div>
-                <button type="submit" value="Submit">上传</button>
+                <div class="fieldWrapper">
+                    <label>Your introduction:</label>
+                    {{ form.introduction }}
+                </div>
+                <div class="fieldWrapper">
+                    <label>Your avatar:</label>
+                    {{ form.avatar }}
+                </div>
+
+                <input type="hidden" name="curruser" value="{{ user.username }}">
+                <input type="submit" value="提交">
             </form>
-        </el-main>
-
-
-        <form action="" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form }}
-
-            <h1 style="text-align: center">设置头像</h1>
-            <div style="text-align: center">
-                <el-upload
-                        class="avatar-uploader"
-                        action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-            </div>
-            <input type="hidden" name="curruser" value="{{ user.username }}">
-            <input type="submit" value="提交">
-        </form>
+        </div>
     {% else %}
         <h3>您未登录</h3>
     {% endif %}

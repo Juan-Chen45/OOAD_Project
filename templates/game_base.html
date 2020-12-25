@@ -28,6 +28,22 @@
 <div id="app" style="height: 100%">
 
     <el-container style="height: 100%; border: 1px solid #eee">
+
+                <el-dialog
+                        style="position: absolute;z-index: 50"
+                        title="Document"
+                        :visible.sync="dialogVisible"
+                        width="30%"
+                        :before-close="handleClose">
+                    <BR>
+                        大家好！欢迎来到快乐游戏站。在这里你可以选择注册成为一个玩家，畅游在游戏的海洋，你可以在你账户余额允许的情况下<br></BR>
+                        购买游戏并发表评论，同时，你也可以在你的游戏仓库中发现所有你曾经购买过的游戏。<BR></BR>另外，你也可以选择注册成为一位游戏
+开发者，随心所欲的散发你的才华，当有用户购买你开发的游戏时，你会获得一定的金钱，<br></br>同时我们平台也提供了丰富的游戏版本管理系统，欢迎您的加入！</span>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button @click="dialogVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+                     </span>
+                </el-dialog>
         <el-aside width="280px" style="background-color: rgb(238, 241, 246)">
             <el-menu class="el-menu-vertical-demo" style="height: 100%"
                      active-text-color="#409EFF"
@@ -48,12 +64,13 @@
                         </el-menu-item>
                     </a></li>
 
-                <a style="text-decoration:none">
-                    <el-menu-item index="3">
-                        <i class="el-icon-search"></i>
-                        <span slot="title">Search</span>
+                <el-button type="text" @click="dialogVisible = true" style="width: 100%; text-align: left">
+                    <el-menu-item index="5">
+                        <i class="el-icon-document" style="align-content: center"></i>
+                        <span slot="title">Document</span>
                     </el-menu-item>
-                </a>
+                </el-button>
+
                 <li style="flex: 1"></li>
                 {% if user.is_authenticated %}
                     <el-submenu index="4">
@@ -78,7 +95,7 @@
                                     <el-menu-item index="4-1-1">View My Profile</el-menu-item>
                                 </a>
                                 <el-menu-item index="4-1-2" disabled="true">
-                                    账户余额: {{ user.extenduser.account }}</el-menu-item>
+                                    账户余额: {{ user.developer.account }}</el-menu-item>
                             </el-submenu>
                         {% endif %}
                         </a>
@@ -141,6 +158,7 @@
                     cities: cityOptions,
                     isIndeterminate: true,
                 },
+                dialogVisible: false,
                 centerDialogVisible: false,
                 {% block Data %}{% endblock %}
 

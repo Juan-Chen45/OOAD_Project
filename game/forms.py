@@ -32,23 +32,7 @@ class DiscountRegisterForm(forms.Form):
                                     empty_value=False,
                                     coerce=bool,
                                     )
-    dlcs = forms.TypedChoiceField()
 
-    def set_fields(self, dlc_list):
-        choices = []
-        for dlc in dlc_list:
-            choices.append((dlc, dlc.name))
-
-        if len(dlc_list) == 0:
-            choices.append((None, "No selection"))
-
-        self.dlcs = forms.TypedChoiceField(
-            label="选择dlc",
-            widget=forms.RadioSelect,
-            choices=choices,
-            empty_value=None,
-            coerce=DLC,
-        )
 
 
 class DLCRegisterForm(forms.Form):

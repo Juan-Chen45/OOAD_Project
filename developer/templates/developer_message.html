@@ -17,7 +17,7 @@
 
 {% for game in gamelist %}  
 <div class="col-lg-3 col-lg-offset-1" style="text-align: center">
-    <img src="{{ game.get_content_img_url }}" height="200" width="200" alt="">
+    <img src="{{ game.avatar.url }}" height="200" width="200" alt="">
     <br><h2><a href="游戏商店页面"  target="opentype">{{game.name}}</a></h2><br>
 </div>
 {% endfor %}
