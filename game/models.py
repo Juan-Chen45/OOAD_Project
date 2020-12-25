@@ -73,7 +73,7 @@ class Version(models.Model):
     game = models.ForeignKey(Game, related_name="game_version", on_delete=models.DO_NOTHING)
     avatar = models.ImageField(upload_to="version_image/%Y/%m/%d/")
     file = models.FileField(upload_to="game_file/%Y/%m/%d/", null=True)
-
+    video = models.FileField(upload_to="game_video/%Y/%m/%d/",null=True)
     def __str__(self):
         return self.game.name + str(self.version_num)
 

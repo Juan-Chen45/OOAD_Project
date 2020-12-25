@@ -1,0 +1,108 @@
+{% extends 'game_base.html' %}
+
+{% block title %}
+    {{ game.name }}
+{% endblock %}
+
+{% block link_extends %}
+    {% load static %}
+    <link rel="stylesheet" href="/static/css/game_detail.css">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
+{% block nav_home_active %}
+    active
+{% endblock %}
+
+{% block content %}
+    <div class="ac"
+         alt=""
+         style="background-image: url({{ dlc.avatar.url }});
+                 background-repeat: no-repeat;
+                 background-position:center center;
+                 background-size: cover;
+                 position: absolute;
+                 overflow-y: hidden;
+                 top: 0;
+                 right: 0;
+                 left: 0;
+                 width: 100%;
+                 height: 400px;"
+    >
+        <div style="height:100%;width:100%;background-image: -webkit-linear-gradient(left,#0f0f0f,rgba(0,0,0,0));"></div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1"
+             style="height: 300px;width: 500px;
+                    top: 130px;
+                     left: 0;
+                     margin-left: 0;
+                     bottom: 0">
+
+            <div style="padding: 30px 30px 0;">
+                <h2 class="game.name"
+                    style='color: #FFFFFF;font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;'>{{ dlc.game.name }}</h2>
+            </div>
+            <div style="padding: 0 30px 0;">
+                <h3 class="game.name"
+                    style='color: #FFFFFF;
+                    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB",
+                    "Microsoft YaHei","微软雅黑",Arial,sans-serif;'>
+                    DLC of : {{ dlc.game.name }}</h3>
+            </div>
+            <div class="game_content"
+                 style="padding: 20px;text-align: left;color: #FFFFFF;
+                 font-family: Open Sans,sans-serif;">
+                {{ dlc.introduction|safe }}</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1"
+             style="height: 500px;width: 500px;
+                    top: 130px;
+                     left: 0;
+                     align-content: center;
+                     bottom: 0">
+            {% if purchased %}
+                <el-button type="info" round @click="centerDialogVisible = true">开始游戏</el-button>
+                <el-dialog
+                        title="在线游玩"
+                        :visible.sync="centerDialogVisible"
+                        width="750px"
+                        :close-on-click-modal="false"
+                        center>
+                    <embed src="{{ dlc.file.url }}" width="700px" height="400px" play="true" loop="false"
+                           quality="high"
+                           type="application/x-shockwave-flash">
+                    <span slot="footer" class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取 消</el-button>
+                </span>
+                </el-dialog>
+
+            {% else %}
+                <div>
+                    <center>
+                        {{ dlc.game.name }}
+                        {{ dlc.id }}
+
+                        <a style="text-decoration: none"
+                           href="{% url "purchase dlc" dlc.game.name dlc.id %}">
+                            <el-button type="info" round @click="byGame">购买游戏</el-button>
+                        </a>
+
+                    </center>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block Method %}
+
+    byGame(){
+    window.location.href = '{% url "purchase dlc" dlc.game.name dlc.id %}';
+    },
+{% endblock %}

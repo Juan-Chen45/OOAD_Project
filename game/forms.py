@@ -75,7 +75,7 @@ class BranchRegisterForm(forms.Form):
     price = forms.FloatField(label="价格",min_value = 0)
     avatar = forms.ImageField(label="封面")
     files = forms.FileField(label = "游戏文件")
-
+    video = forms.FileField(label='游戏视频')
     def clean(self):
         game = Game.objects.get(name = self.cleaned_data["game_name"])
         for v in game.game_version.all():

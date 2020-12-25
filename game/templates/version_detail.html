@@ -58,6 +58,30 @@
         </div>
     </div>
 
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1"
+             style="height: 500px;width: 500px;
+                    top: 130px;
+                     left: 0;
+                     align-content: center;
+                     bottom: 0">
+
+            <div>
+                <div>
+                    <video controls style="width: 300px;height: 500px">
+                        <source src="{{ version.video.url }}" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="line" style="height: 30px"></div>
+    <div class="line" style="height: 30px"></div>
+    <div class="line" style="height: 30px"></div>
+
+
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1"
              style="height: 500px;width: 500px;
@@ -67,6 +91,8 @@
                      bottom: 0">
             {% if purchased %}
                 <el-button type="info" round @click="centerDialogVisible = true">开始游戏</el-button>
+                <a href={% url "download_version" version.pk %}>
+                <el-button type="info" round >下载游戏</el-button></a>
                 <el-dialog
                         title="在线游玩"
                         :visible.sync="centerDialogVisible"

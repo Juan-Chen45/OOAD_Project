@@ -62,16 +62,24 @@
                             <span slot="title">{{ user.username }}</span>
                         </template>
                         {% if user.extenduser %}
-                            <a href="{% url "user_home" %}" style="text-decoration:none">
-                            <el-menu-item index="4-1">
-                                View My Profile
-                            </el-menu-item>
+                            <el-submenu index="4-1">
+                                <template slot="title">Profile</template>
+                                <a href="{% url "user_home" %}" style="text-decoration:none">
+                                    <el-menu-item index="4-1-1">View My Profile</el-menu-item>
+                                </a>
+                                <el-menu-item index="4-1-2" disabled="true">
+                                    账户余额: {{ user.extenduser.account }}</el-menu-item>
+                            </el-submenu>
                         {% endif %}
                         {% if user.developer %}
-                            <a href="{% url "developer home" %}" style="text-decoration:none">
-                            <el-menu-item index="4-1">
-                                View My Profile
-                            </el-menu-item>
+                            <el-submenu index="4-1">
+                                <template slot="title">Profile</template>
+                                <a href="{% url "developer home" %}" style="text-decoration:none">
+                                    <el-menu-item index="4-1-1">View My Profile</el-menu-item>
+                                </a>
+                                <el-menu-item index="4-1-2" disabled="true">
+                                    账户余额: {{ user.extenduser.account }}</el-menu-item>
+                            </el-submenu>
                         {% endif %}
                         </a>
                         <a href="{% url "logout" %}" style="text-decoration:none">
@@ -140,6 +148,9 @@
         },
         methods: {
             {% block Method %}{% endblock %}
+            jumpTo() {
+                window.location.href = '{% url "modify_user" %}';
+            },
             open() {
                 this.$alert('<embed src="{{ version.file.url }}" width="450px" height="400px" play="true" loop="false" quality="high"type="application/x-shockwave-flash">', 'HTML 片段', {
                     dangerouslyUseHTMLString: true

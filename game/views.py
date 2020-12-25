@@ -3,6 +3,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template.context_processors import csrf
 from django.urls import reverse
@@ -122,7 +123,7 @@ def version_detail(request, game_name, version_id):
 def dlc_detail(request, game_name, dlc_id):
     currversion = get_object_or_404(DLC, pk=dlc_id)
     context = {}
-    context["game"] = currversion
+    context["dlc"] = currversion
     context["purchased"] = False
     extend = request.user.extenduser
     if extend.dlc.filter(pk=dlc_id).exists():
@@ -321,27 +322,27 @@ def purchase_dlc(request, dlc_name, dlc_id):
     # else:
     #     return render(request, 'purchase_dlc.html', context)
     referer = request.META.get("HTTP_REFERER", reverse("home"))
-    if request.method == 'POST':
-        context = {}
-        context.update(csrf(request))
-        currdlc = DLC.objects.get(pk=dlc_id)
-        extend = get_object_or_404(ExtendUser, user=request.user)
-        # 买了
-        # 判断是否购买成功
-        success = extend.account > currdlc.price
-        if success:
-            # extend.account = extend.account - currversion.price
-            ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currdlc.price)
-            developer = currdlc.game.author
-            # developer.account += currversion.price
-            Developer.objects.filter(id=developer.id).update(account=developer.account + currdlc.price)
-            developer.save()
-            # game_list = [context]
-            # for g in extend.version.all():
-            #     game_list.append(g)
-            # extend.version.set(game_list)
-            extend.dlc.add(currdlc)
-            extend.save()
+    # if request.method == 'POST':
+    context = {}
+    context.update(csrf(request))
+    currdlc = DLC.objects.get(pk=dlc_id)
+    extend = get_object_or_404(ExtendUser, user=request.user)
+    # 买了
+    # 判断是否购买成功
+    success = extend.account > currdlc.price
+    if success:
+        # extend.account = extend.account - currversion.price
+        ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currdlc.price)
+        developer = currdlc.game.author
+        # developer.account += currversion.price
+        Developer.objects.filter(id=developer.id).update(account=developer.account + currdlc.price)
+        developer.save()
+        # game_list = [context]
+        # for g in extend.version.all():
+        #     game_list.append(g)
+        # extend.version.set(game_list)
+        extend.dlc.add(currdlc)
+        extend.save()
     return redirect(referer)
 
 
@@ -361,9 +362,10 @@ def add_branch(request, game_name):
             avatar = reg_form.cleaned_data['avatar']
             file = reg_form.cleaned_data['files']
             price = reg_form.cleaned_data["price"]
+            video = reg_form.cleaned_data['video']
             branch = Version.objects.create(version_num=version_num, game=game, introduction=introduction,
                                             avatar=avatar,
-                                            file=file, price=price)
+                                            file=file, price=price, video=video)
             branch.save()
 
             # redirect 去的地址要改
@@ -378,3 +380,12 @@ def add_branch(request, game_name):
         reg_form = BranchRegisterForm()
         context["form"] = reg_form
         return render(request, "add_branch.html", context)
+
+
+def download_version(request, version_id):
+    ver = Version.objects.get(id=version_id)
+    img = open(ver.file.url, 'rb').read()
+    response = FileResponse(img)
+    response['content_type'] = "application/x-shockwave-flash"
+    response['Content-Disposition'] = 'attachment; filename=test'
+    return response
