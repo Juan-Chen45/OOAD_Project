@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.contenttypes.models import ContentType
@@ -111,6 +113,16 @@ def version_detail(request, game_name, version_id):
     currversion = get_object_or_404(Version, pk=version_id)
     context = {}
     context["version"] = currversion
+    discounts = Discount.objects.filter(game=currversion.game).all()
+    flag = True
+    for d in discounts:
+        if d.from_date < date.today() < d.to_date:
+            price = d.price
+            flag = False
+            break
+    if flag:
+        price = currversion.price
+    context['price'] = price
     context["purchased"] = False
     extend = request.user.extenduser
     if extend.version.filter(pk=version_id).exists():
@@ -124,6 +136,16 @@ def dlc_detail(request, game_name, dlc_id):
     currversion = get_object_or_404(DLC, pk=dlc_id)
     context = {}
     context["dlc"] = currversion
+    discounts = Discount.objects.filter(dlc=currversion).all()
+    flag = True
+    for d in discounts:
+        if d.from_date < date.today() < d.to_date:
+            price = d.price
+            flag = False
+            break
+    if flag:
+        price = currversion.price
+    context['price'] = price
     context["purchased"] = False
     extend = request.user.extenduser
     if extend.dlc.filter(pk=dlc_id).exists():
@@ -280,10 +302,19 @@ def purchase_game(request, game_name, version_id):
     # 判断是否购买成功
     success = extend.account > currversion.price
     if success:
-        extend.account = extend.account - currversion.price
+        discounts = Discount.objects.filter(game=currversion.game).all()
+        flag = True
+        for d in discounts:
+            if d.from_date < date.today() < d.to_date:
+                price = d.price
+                flag = False
+                break
+        if flag:
+            price = currversion.price
+        extend.account = extend.account - price
         # ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currversion.price)
         developer = currversion.game.author
-        developer.account += currversion.price
+        developer.account += price
         # Developer.objects.filter(id=developer.id).update(account=developer.account + currversion.price)
         developer.save()
         # game_list = [context]
@@ -331,11 +362,20 @@ def purchase_dlc(request, dlc_name, dlc_id):
     # 判断是否购买成功
     success = extend.account > currdlc.price
     if success:
+        discounts = Discount.objects.filter(dlc=currdlc).all()
+        flag = True
+        for d in discounts:
+            if d.from_date < date.today() < d.to_date:
+                price = d.price
+                flag = False
+                break
+        if flag:
+            price = currdlc.price
         # extend.account = extend.account - currversion.price
-        ExtendUser.objects.filter(id=extend.id).update(account=extend.account - currdlc.price)
+        ExtendUser.objects.filter(id=extend.id).update(account=extend.account - price)
         developer = currdlc.game.author
         # developer.account += currversion.price
-        Developer.objects.filter(id=developer.id).update(account=developer.account + currdlc.price)
+        Developer.objects.filter(id=developer.id).update(account=developer.account + price)
         developer.save()
         # game_list = [context]
         # for g in extend.version.all():

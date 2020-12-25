@@ -20,6 +20,10 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="{% url 'home' %}">SUSTC GAMER</a>
+            <a class="navbar-brand" href="{% url 'regist_game' %}">upload game</a>
+            <a class="navbar-brand" href="{% url 'modify developer message' %}">change info</a>
+            <a class="navbar-brand" href="{% url 'game select' %}">modify owned games</a>
+            <a class="navbar-brand" href="{% url 'dlc select' %}">manage dlc/branches</a>
             <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -31,64 +35,63 @@
 
 {% block content %}
     <div class="container-fluid">
-        <div class="row" >
-        <div class="col-lg-3" style="text-align: center">
+        <div class="row">
+            <div class="col-lg-3" style="text-align: center">
                 <div class="panel panel-info">
                     <div class="panel-heading" style="text-align: center">
                         <h3>Welcome, developer {{ user.username }}</h3>
                     </div>
                     <div class="panel-body">
-                        <img src="{{ developer.avatar.url }}" height="250" width="250" alt="" class="img-circle">
+                        <img src="{{ developer.get_content_img_url }}" height="250" width="250" alt=""
+                             class="img-circle">
                         <br>
                         <h4>{{ developer.introduction }}</h4>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
-        <table id="games">
-            <caption>
-                <h2>Game List</h2>
-            </caption>
-            <tr>
-                <th>cover</th>
-                <th>name</th>
-                <th>instruction</th>
-                <th>create date</th>
-                <th>last modify</th>
-                <th>operation</th>
-            </tr>
-            {% for game in game_list %}
-                <tr>
-                    <td>
-                        <img src="{{ game.avatar.url }}" height="50" width="80">
-                    </td>
-                    <td>{{ game.name }}</td>
-                    <td>{{ game.introduction }}</td>
-                    <td>{{ game.create_time|date:"Y-m-d H:n:s" }}</td>
-                    <td>{{ game.lastupdate_time|date:"Y-m-d H:n:s" }}</td>
-                    <td>
-                        <a href="{% url 'modify_game' game.name%}">
-                            <button type="button" class="btn btn-primary">管理游戏</button>
-                        </a>
-                        <a href="{% url 'set_discount' game.name %}">
-                            <button type="button" class="btn btn-primary">打折</button>
-                        </a>
-                        <a href="{% url 'add dlc' game.name %}">
-                            <button type="button" class="btn btn-primary">添加dlc</button>
-                        </a>
-                        <a href="{% url 'add branch' game.name %}">
-                            <button type="button" class="btn btn-primary">添加branch</button>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+            <div class="col-lg-offset-3">
+                <table id="games">
+                    <caption>
+                        <h2>Game List</h2>
+                    </caption>
+                    <tr>
+                        <th>cover</th>
+                        <th>name</th>
+                        <th>instruction</th>
+                        <th>create date</th>
+                        <th>operation</th>
+                    </tr>
+                    {% for game in game_list %}
+                        <tr>
+                            <td>
+                                <img src="{{ game.get_content_img_url }}" height="50" width="80">
+                            </td>
+                            <td>{{ game.name }}</td>
+                            <td>{{ game.introduction }}</td>
+                            <td>{{ game.create_date }}</td>
+                            <td>
+                                <a href="{% url 'modify_game' game.name %}">
+                                    <button type="button" class="btn btn-primary">管理游戏</button>
+                                </a>
+                                <a href="{% url 'set_discount' game.name %}">
+                                    <button type="button" class="btn btn-primary">打折</button>
+                                </a>
+                                <a href="{% url 'add dlc' game.name %}">
+                                    <button type="button" class="btn btn-primary">添加dlc</button>
+                                </a>
+                                <a href="{% url 'add branch' game.name %}">
+                                    <button type="button" class="btn btn-primary">添加branch</button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
 
-        <a href="{% url 'developer home' %}">
-            <button type="button" class="btn btn-primary">返回</button>
-        </a>
-    </div>
-</div>
+                <a href="{% url 'developer home' %}">
+                    <button type="button" class="btn btn-primary">返回</button>
+                </a>
+            </div>
+        </div>
     </div>
 
 
