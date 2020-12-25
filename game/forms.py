@@ -8,10 +8,10 @@ from game.models import Game, GameType, DLC, Version
 class GameRegisterForm(forms.Form):
     name = forms.CharField(label="游戏名", max_length=20, min_length=3,
                            widget=forms.TextInput(attrs={"placeholder": "请输入游戏名"}))
-    price = forms.FloatField(label="价格", min_value=0)
+    # price = forms.FloatField(label="价格", min_value=0)
     avatar = forms.ImageField(label="封面")
     type = forms.ModelChoiceField(label="游戏类型",queryset=GameType.objects.all())
-    files = forms.FileField(validators=[validators.FileExtensionValidator(['swf'])])
+    # files = forms.FileField(validators=[validators.FileExtensionValidator(['swf'])])
     introduction = forms.CharField(widget=forms.Textarea(attrs={'width':"40%", 'cols' : "80", 'rows': "20", }))
 
     # 在clean验证的时候其实可以根据每一个不同的字段进行验证的
@@ -20,7 +20,6 @@ class GameRegisterForm(forms.Form):
         if Game.objects.filter(name=name).exists():
             raise forms.ValidationError("游戏名已存在")
         return name
-
 
 class DiscountRegisterForm(forms.Form):
     # blank=True null=True
@@ -53,29 +52,33 @@ class DiscountRegisterForm(forms.Form):
 
 
 class DLCRegisterForm(forms.Form):
-    name = forms.CharField(label="dlc名", max_length=20, min_length=3,
-                           widget=forms.TextInput(attrs={"placeholder": "请输入dlc名"}))
-    price = forms.FloatField(label="价格", min_value=0)
+    game_name = forms.CharField(widget=forms.HiddenInput)
+    name = forms.CharField(label="dlc名", max_length=50)
+    price = forms.FloatField(label="价格",min_value=0)
+    introduction = forms.CharField(label="dlc介绍",widget=forms.Textarea(attrs={'width':"40%", 'cols' : "80", 'rows': "20", }))
     avatar = forms.ImageField(label="封面")
-    introduction = forms.CharField(label="dlc介绍")
     file = forms.FileField(label="选择dlc文件")
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        if DLC.objects.filter(name=name).exists():
-            raise forms.ValidationError("dlc名已存在")
-        return name
+    def clean(self):
+        game = Game.objects.get(name = self.cleaned_data["game_name"])
+        for v in game.dlc_version.all():
+            if v.name == self.cleaned_data["name"]:
+                raise forms.ValidationError("DLC名称已存在")
+        return self.cleaned_data
+
 
 
 class BranchRegisterForm(forms.Form):
-    name = forms.CharField(label="branch名", max_length=20, min_length=3,
-                           widget=forms.TextInput(attrs={"placeholder": "请输入branch名"}))
+    game_name = forms.CharField(widget=forms.HiddenInput)
+    version_num = forms.IntegerField(label="版本号")
+    introduction = forms.CharField(widget=forms.Textarea(attrs={'width':"40%", 'cols' : "80", 'rows': "20", }))
+    price = forms.FloatField(label="价格",min_value = 0)
     avatar = forms.ImageField(label="封面")
-    introduction = forms.CharField(label="branch介绍")
-    file = forms.FileField(label="选择branch文件")
+    files = forms.FileField(label = "游戏文件")
 
-    def clean_name(self):
-        name = self.cleaned_data["name"]
-        if Version.objects.filter(name=name).exists():
-            raise forms.ValidationError("dlc名已存在")
-        return name
+    def clean(self):
+        game = Game.objects.get(name = self.cleaned_data["game_name"])
+        for v in game.game_version.all():
+            if v.version_num == self.cleaned_data["version_num"]:
+                raise forms.ValidationError("版本号已存在")
+        return self.cleaned_data

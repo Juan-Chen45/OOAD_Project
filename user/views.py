@@ -18,7 +18,8 @@ def user_home(request):
     context['user'] = request.user
     if request.user.is_authenticated:
         context['extendUser'] = ExtendUser.objects.get(user=request.user)
-        context['games'] = context['extendUser'].game.all()
+        context['version'] = context['extendUser'].version.all()
+        context["dlc"] = context['extendUser'].dlc.all()
         return render(request, 'user_home.html', context)
     else:
         return user_login(request)

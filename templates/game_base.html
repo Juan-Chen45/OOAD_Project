@@ -98,7 +98,7 @@
             </el-menu>
         </el-aside>
 
-        <el-main class="MainBlock" style="padding: 0">
+        <el-main class="MainBlock" style="padding: 0;overflow: hidden">
             {% block content %}{% endblock %}
         </el-main>
 
@@ -133,12 +133,18 @@
                     cities: cityOptions,
                     isIndeterminate: true,
                 },
+                centerDialogVisible: false,
                 {% block Data %}{% endblock %}
 
             };
         },
         methods: {
             {% block Method %}{% endblock %}
+            open() {
+                this.$alert('<embed src="{{ version.file.url }}" width="450px" height="400px" play="true" loop="false" quality="high"type="application/x-shockwave-flash">', 'HTML 片段', {
+                    dangerouslyUseHTMLString: true
+                });
+            },
             handleCurrentChange(val) {
                 window.location.href = "?page= " + val;
             },

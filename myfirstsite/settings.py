@@ -156,7 +156,7 @@ CKEDITOR_UPLOAD_PATH = "upload/"
 # }
 
 # 自定义参数
-GAME_PER_PAGE = 7
+GAME_PER_PAGE = 20
 
 # 缓存
 CACHES = {
